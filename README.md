@@ -24,7 +24,7 @@ Fell free to add more libraries.
 - Implement Lenis for smooth and accessible scrolling, so everyone can enjoy your website.
 - Add a custom shader to make hover image interaction more engaging and immersive.
 - Make sure the Awwwards model rotates during scroll movement, adding some excitement to your website.
-- Pin the Caps section in place and have the caps appear with opacity, scale, and rotation during scroll movement. Also, ensure that each cap remains floating, and create this animation using a GSAP Timeline. Alternatively, you can reveal the caps using a custom shader.
+- Pin the Caps section in place and have the caps appear with opacity, scale, and rotation during scroll movement (alternatively, you can reveal them using a custom shader). Also, ensure that each cap remains floating, and create this animation using a GSAP Timeline.
 - Ensure your website is optimized for devices up to an iPad.
 
 ## Tips
