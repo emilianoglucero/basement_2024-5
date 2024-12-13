@@ -22,7 +22,6 @@
     "target": "esnext",
     "noUncheckedIndexedAccess": true,
     "ignoreDeprecations": "5.0",
-    "importsNotUsedAsValues": "error",
     "baseUrl": "./src",
     "paths": {
       "~/public/*": [

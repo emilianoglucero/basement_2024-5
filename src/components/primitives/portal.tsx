@@ -14,7 +14,7 @@ export const Portal = ({
   onMount,
   className
 }: Props) => {
-  const ref = React.useRef<HTMLElement>()
+  const ref = React.useRef<HTMLElement | null>(null)
   const [isMounted, setIsMounted] = React.useState(false)
 
   React.useEffect(() => {

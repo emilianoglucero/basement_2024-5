@@ -8,7 +8,7 @@ export const formatError = (
       return { message: error.message, name: error.name }
     }
     return { message: String(error) }
-  } catch (error) {
+  } catch {
     return { message: 'An unknown error ocurred.' }
   }
 }

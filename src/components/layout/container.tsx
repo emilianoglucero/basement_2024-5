@@ -4,7 +4,7 @@ import * as React from 'react'
 import s from './styles.module.scss'
 export const Container = React.forwardRef<
   HTMLDivElement,
-  JSX.IntrinsicElements['div'] & {
+  React.HTMLAttributes<HTMLDivElement> & {
     as?: 'div' | 'section' | 'main' | 'header' | 'footer'
   }
 >(({ className, as = 'div', ...props }, ref) => {
