@@ -1,14 +1,23 @@
 'use client'
 
-import Image from 'next/image'
 import React, { CSSProperties } from 'react'
 
 import { Container } from '~/components/layout/container'
 
 import s from './caps.module.scss'
+import { Cap } from './components/cap'
+import { ASSETS } from '~/constants/assets'
+
+interface CapStyle extends CSSProperties {
+  transform: string
+  top?: string
+  bottom?: string
+  left?: string
+  right?: string
+}
 
 export const FallingCaps = () => {
-  const caps: CSSProperties[] = [
+  const caps: CapStyle[] = [
     {
       transform: 'translate(0, 0) scale(0.85) rotate(-25deg)',
       top: '7%',
@@ -58,15 +67,10 @@ export const FallingCaps = () => {
         <span>everything it can be.</span>
       </h2>
       {caps.map((style, index) => (
-        <Image
-          alt="Cap"
-          className={s.cap}
-          height={509}
+        <Cap
           key={index}
-          quality={100}
-          src="/assets/Cap.png"
-          style={{ ...style }}
-          width={509}
+          image={{ url: ASSETS.CAP.URL, style }}
+          model={ASSETS.CAP.MODEL}
         />
       ))}
     </Container>

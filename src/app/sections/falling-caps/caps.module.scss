@@ -31,13 +31,4 @@
       }
     }
   }
-
-  .cap {
-    @include respond-to('tablet') {
-      display: none;
-    }
-
-    position: absolute;
-    width: tovw(320px, 220px, 'desktop');
-  }
 }
