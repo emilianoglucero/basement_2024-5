@@ -1,39 +1,55 @@
 import Image from 'next/image'
 import React, { useRef } from 'react'
 
-import { ScrollScene, UseCanvas } from '@14islands/r3f-scroll-rig'
+import {
+  ScrollScene,
+  styles,
+  UseCanvas,
+  useScrollRig
+} from '@14islands/r3f-scroll-rig'
 
 import s from './gallery-item.module.scss'
-import { GalleryImage } from '../../types'
+import { GalleryImage } from '~/ts/gallery'
+import { WebGLImage } from '~/components/three/images/webgl-images/webgl-images'
+import { ASSETS } from '~/constants/assets'
 
 interface GalleryItemProps {
   image: GalleryImage
 }
 
 export const GalleryItem = ({ image }: GalleryItemProps) => {
-  const ref = useRef<HTMLDivElement>(null!)
+  const trackedElement = useRef<HTMLDivElement>(null!)
+  const imgRef = useRef<HTMLImageElement>(null!)
+  const { hasSmoothScrollbar } = useScrollRig()
 
   return (
     <>
-      <div ref={ref} className={s.container} style={image.style}>
+      <div ref={trackedElement} className={s.container} style={image.style}>
         <Image
-          alt="basement-team"
+          alt={ASSETS.GALLERY.ALT}
+          src={image.url}
           fill
           priority
-          quality={100}
-          src={image.url}
+          className={styles.hiddenWhenSmooth}
+          onLoad={(event: React.SyntheticEvent<HTMLImageElement>) => {
+            imgRef.current = event.target as HTMLImageElement
+          }}
         />
       </div>
-      <UseCanvas>
-        <ScrollScene track={ref}>
-          {({ scale }) => (
-            <mesh scale={scale}>
-              <planeGeometry />
-              <meshBasicMaterial color="red" />
-            </mesh>
-          )}
-        </ScrollScene>
-      </UseCanvas>
+
+      {hasSmoothScrollbar && (
+        <UseCanvas>
+          <ScrollScene track={trackedElement}>
+            {(scrollState) => (
+              <WebGLImage
+                imgRef={imgRef}
+                scrollState={scrollState}
+                scale={scrollState.scale}
+              />
+            )}
+          </ScrollScene>
+        </UseCanvas>
+      )}
     </>
   )
 }

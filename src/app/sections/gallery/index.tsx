@@ -2,26 +2,27 @@ import React from 'react'
 
 import { Container } from '~/components/layout/container'
 import { GalleryItem } from './components/gallery-item'
-import type { GalleryImage } from './types'
+import type { GalleryImage } from '~/ts/gallery'
 
 import s from './gallery.module.scss'
+import { ASSETS } from '~/constants/assets'
 
 export const Gallery = () => {
   const images: GalleryImage[] = [
     {
-      url: '/images/basement-team-1.jpg',
+      url: ASSETS.GALLERY.IMAGES[0].URL,
       style: {
         gridArea: '1 / 1 / 1 / 13'
       }
     },
     {
-      url: '/images/basement-team-2.jpg',
+      url: ASSETS.GALLERY.IMAGES[1].URL,
       style: {
         gridArea: '2 / 1 / 3 / 9'
       }
     },
     {
-      url: '/images/basement-team-3.jpg',
+      url: ASSETS.GALLERY.IMAGES[2].URL,
       style: {
         gridArea: '2 / 9 / 3 / 13'
       }
