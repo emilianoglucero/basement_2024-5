@@ -36,7 +36,6 @@ const extractTransformValues = (transform: string) => {
 const WebGLModel = ({ model, scale, style }: WebGLModelProps) => {
   const meshRef = useRef<any>(null!)
   const { nodes, materials } = useGLTF(model) as unknown as GLTFResult
-  console.log('scale', scale)
 
   // Extract transform values from style
   const transformValues = useMemo(() => {

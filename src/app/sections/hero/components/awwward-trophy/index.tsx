@@ -3,9 +3,9 @@ import { useRef } from 'react'
 
 import { styles, UseCanvas } from '@14islands/r3f-scroll-rig'
 import { ScrollScene } from '@14islands/r3f-scroll-rig'
-import AwwwardsTrophyModel from '../awwwward-trophy-model/indes'
 import { useScrollRig } from '@14islands/r3f-scroll-rig'
 import { ASSETS } from '~/constants/assets'
+import AwwwardsTrophyModel from '../awwwward-trophy-model'
 
 export const AwwwardsTrophy = () => {
   const trackedElement = useRef<HTMLDivElement>(null!)
@@ -13,7 +13,7 @@ export const AwwwardsTrophy = () => {
 
   return (
     <>
-      <div ref={trackedElement} className={styles.hiddenWhenSmooth}>
+      <div ref={trackedElement}>
         <Image
           alt={ASSETS.AWWWARDS.IMAGE.ALT}
           height={360}
@@ -21,6 +21,7 @@ export const AwwwardsTrophy = () => {
           quality={100}
           src={ASSETS.AWWWARDS.IMAGE.SRC}
           width={250}
+          className={styles.hiddenWhenSmooth}
         />
       </div>
       {hasSmoothScrollbar && (

@@ -1,4 +1,9 @@
-import { ScrollScene, UseCanvas, useScrollRig } from '@14islands/r3f-scroll-rig'
+import {
+  ScrollScene,
+  styles,
+  UseCanvas,
+  useScrollRig
+} from '@14islands/r3f-scroll-rig'
 import Image from 'next/image'
 import { useRef } from 'react'
 import s from './cap.module.scss'
@@ -24,6 +29,7 @@ export const Cap = ({ image, model }: CapProps) => {
           quality={100}
           src={image.url}
           width={509}
+          className={styles.hiddenWhenSmooth}
           onLoad={(event: React.SyntheticEvent<HTMLImageElement>) => {
             imgRef.current = event.target as HTMLImageElement
           }}

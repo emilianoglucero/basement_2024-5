@@ -68,11 +68,12 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           basementGrotesqueExpanded.variable
         )}
       >
-        <Header />
-        {children}
-        <Footer />
-        <AppHooks />
-        <CanvasProvider />
+        <CanvasProvider>
+          <Header />
+          {children}
+          <Footer />
+          <AppHooks />
+        </CanvasProvider>
       </body>
     </html>
   )
