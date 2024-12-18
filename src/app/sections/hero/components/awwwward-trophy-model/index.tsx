@@ -4,6 +4,8 @@ import { Float, useGLTF } from '@react-three/drei'
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { GLTF } from 'three-stdlib'
+import { EASE, gsap } from '~/lib/gsap'
+import { useIsomorphicLayoutEffect } from '~/hooks/use-isomorphic-layout-effect'
 
 interface GLTFResult extends GLTF {
   nodes: {
@@ -55,6 +57,61 @@ const AwwwardsTrophyModel = ({ scale, model }: TrophyModelProps) => {
       )
     }
   })
+
+  useIsomorphicLayoutEffect(() => {
+    materials.m_Trophy3.transparent = true
+    materials.m_Outline.transparent = true
+
+    materials.m_Trophy3.opacity = 0
+    materials.m_Outline.opacity = 0
+
+    if (meshRef.current) {
+      meshRef.current.scale.set(0.2, 0.2, 0.2)
+      meshRef.current.rotation.set(0, initialRotation - Math.PI * 4, 0)
+      meshRef.current.position.x = 4
+    }
+
+    const tl = gsap.timeline({
+      delay: 0.1,
+      ease: EASE
+    })
+
+    tl.to(meshRef.current.position, {
+      x: 0,
+      duration: 1.4,
+      ease: 'power3.out'
+    })
+      .to(
+        meshRef.current.scale,
+        {
+          x: 1,
+          y: 1,
+          z: 1,
+          duration: 1.2,
+          ease: 'elastic.out(1, 0.75)'
+        },
+        '<0.1'
+      )
+      .to(
+        meshRef.current.rotation,
+        {
+          y: initialRotation,
+          duration: 1.6,
+          ease: 'elastic.out(0.5, 0.3)',
+          delay: 0.4
+        },
+        '<0.1'
+      )
+      .to(
+        [materials.m_Trophy3, materials.m_Outline],
+        {
+          opacity: 1,
+          duration: 1,
+          stagger: 0.1
+        },
+        '<'
+      )
+  }, [materials, initialRotation])
 
   const minScale = Array.isArray(scale)
     ? Math.min(scale[0], scale[1])
