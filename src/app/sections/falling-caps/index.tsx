@@ -19,52 +19,55 @@ interface CapStyle extends CSSProperties {
 export const FallingCaps = () => {
   const caps: CapStyle[] = [
     {
-      transform: 'translate(0, 0) scale(0.85) rotate(-25deg)',
+      transform: 'translate(0, 0) scale(0.85) rotate(-12deg)',
       top: '7%',
       left: '3%'
     },
     {
-      transform: 'translate(0, 0) scale(0.75) rotate(-22deg)',
+      transform: 'translate(0, 0) scale(0.75) rotate(-12deg)',
       top: '18%',
-      right: '12%'
+      right: '20%'
     },
     {
-      transform: 'translate(0, 0) scale(0.55) rotate(-28deg)',
+      transform: 'translate(0, 0) scale(0.55) rotate(-14deg)',
       bottom: '18%',
       right: '35%'
     },
     {
-      transform: 'translate(0, 0) scale(0.65) rotate(22deg)',
+      transform: 'translate(0, 0) scale(0.65) rotate(10deg)',
       top: '2%',
       right: '2%'
     },
     {
-      transform: 'translate(0, 0) rotate(22deg)',
+      transform: 'translate(0, 0) rotate(8deg)',
       top: '10%',
       left: '35%'
     },
     {
-      transform: 'translate(0, 0) scale(0.7) rotate(27deg)',
+      transform: 'translate(0, 0) scale(0.7) rotate(11deg)',
       bottom: '7%',
       left: '1%'
     },
     {
-      transform: 'translate(0, 0) scale(0.72) rotate(22deg)',
+      transform: 'translate(0, 0) scale(0.72) rotate(-14deg)',
       bottom: '1%',
-      left: '18%'
+      left: '28%'
     },
     {
-      transform: 'translate(0, 0) scale(0.85) rotate(-8deg)',
-      bottom: '1%',
+      transform: 'translate(0, 0) scale(0.85) rotate(-12deg)',
+      bottom: '4%',
       right: '1%'
     }
   ]
   return (
     <Container className={s.container}>
-      <Cap
-        image={{ url: ASSETS.CAP.URL, style: caps[0] }}
-        model={ASSETS.CAP.MODEL}
-      />
+      {caps.map((cap, index) => (
+        <Cap
+          key={index}
+          image={{ url: ASSETS.CAP.URL, style: cap }}
+          model={ASSETS.CAP.MODEL}
+        />
+      ))}
     </Container>
   )
 }

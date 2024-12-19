@@ -19,11 +19,7 @@ export const Cap = ({ image, model }: CapProps) => {
   return (
     <section className={s.section}>
       <div className={s.stickyContainer}>
-        <div
-          className={s.stickyContent}
-          ref={trackedElement}
-          // style={image.style}
-        >
+        <div className={s.stickyContent} ref={trackedElement}>
           <Image
             alt={ASSETS.CAP.ALT}
             height={509}

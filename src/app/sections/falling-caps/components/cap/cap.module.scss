@@ -1,7 +1,11 @@
 @import '~/css/helpers';
 
 .section {
-  // margin: 14vh 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
 
   .stickyContainer {
     @include respond-to('tablet') {
@@ -13,10 +17,9 @@
 
     .stickyContent {
       position: sticky;
-      top: 0vh;
-      // left: 0vh;
+      top: 0;
       height: 100vh;
-      // transform: translate(0, 0) scale(0.85) rotate(-25deg);
+      // width: 100%;
     }
   }
 }

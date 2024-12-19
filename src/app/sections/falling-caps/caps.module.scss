@@ -1,9 +1,10 @@
 @import '~/css/helpers';
 
 .container {
+  position: relative;
+  height: 500vh;
+
   @include respond-to('tablet') {
     height: 60vh;
   }
-
-  // margin: 14vh 0;
 }
