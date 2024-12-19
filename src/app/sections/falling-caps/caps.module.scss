@@ -8,3 +8,31 @@
     height: 60vh;
   }
 }
+
+.textWrapper {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  h2 {
+    text-align: center;
+    max-width: max-content;
+    text-transform: uppercase;
+    line-height: 1.2;
+    font-family: var(--font-expanded);
+    font-size: tovw(64px, 42px, 'desktop');
+    font-weight: 900;
+
+    span {
+      color: var(--color-orange);
+
+      &::selection {
+        background-color: var(--color-orange);
+        color: var(--color-white);
+      }
+    }
+  }
+}

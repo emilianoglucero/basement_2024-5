@@ -61,6 +61,13 @@ export const FallingCaps = () => {
   ]
   return (
     <Container className={s.container}>
+      <div className={s.textWrapper}>
+        <h2>
+          We want to help make <br />
+          the internet <br />
+          <span>everything it can be.</span>
+        </h2>
+      </div>
       {caps.map((cap, index) => (
         <Cap
           key={index}
