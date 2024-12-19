@@ -1,14 +1,10 @@
-import {
-  ScrollScene,
-  styles,
-  UseCanvas,
-  useScrollRig
-} from '@14islands/r3f-scroll-rig'
+import { styles, UseCanvas, useScrollRig } from '@14islands/r3f-scroll-rig'
 import Image from 'next/image'
 import { useRef } from 'react'
 import s from './cap.module.scss'
 import WebGLModel from '../../webgl-model'
 import { ASSETS } from '~/constants/assets'
+import { StickyScrollScene } from '@14islands/r3f-scroll-rig/powerups'
 
 interface CapProps {
   image: { url: string; style: React.CSSProperties }
@@ -21,29 +17,35 @@ export const Cap = ({ image, model }: CapProps) => {
   const { hasSmoothScrollbar } = useScrollRig()
 
   return (
-    <>
-      <div ref={trackedElement} className={s.capContainer} style={image.style}>
-        <Image
-          alt={ASSETS.CAP.ALT}
-          height={509}
-          quality={100}
-          src={image.url}
-          width={509}
-          className={styles.hiddenWhenSmooth}
-          onLoad={(event: React.SyntheticEvent<HTMLImageElement>) => {
-            imgRef.current = event.target as HTMLImageElement
-          }}
-        />
+    <section className={s.section}>
+      <div className={s.stickyContainer}>
+        <div
+          className={s.stickyContent}
+          ref={trackedElement}
+          // style={image.style}
+        >
+          <Image
+            alt={ASSETS.CAP.ALT}
+            height={509}
+            quality={100}
+            src={image.url}
+            width={509}
+            className={styles.hiddenWhenSmooth}
+            onLoad={(event: React.SyntheticEvent<HTMLImageElement>) => {
+              imgRef.current = event.target as HTMLImageElement
+            }}
+          />
+        </div>
       </div>
       {hasSmoothScrollbar && (
         <UseCanvas>
-          <ScrollScene track={trackedElement}>
+          <StickyScrollScene track={trackedElement}>
             {(props) => (
               <WebGLModel model={model} style={image.style} {...props} />
             )}
-          </ScrollScene>
+          </StickyScrollScene>
         </UseCanvas>
       )}
-    </>
+    </section>
   )
 }

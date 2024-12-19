@@ -1,10 +1,22 @@
 @import '~/css/helpers';
 
-.capContainer {
-  @include respond-to('tablet') {
-    display: none;
-  }
+.section {
+  // margin: 14vh 0;
 
-  position: absolute;
-  width: tovw(320px, 220px, 'desktop');
+  .stickyContainer {
+    @include respond-to('tablet') {
+      display: none;
+    }
+
+    height: 500vh;
+    position: relative;
+
+    .stickyContent {
+      position: sticky;
+      top: 0vh;
+      // left: 0vh;
+      height: 100vh;
+      // transform: translate(0, 0) scale(0.85) rotate(-25deg);
+    }
+  }
 }

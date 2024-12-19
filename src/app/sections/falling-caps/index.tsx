@@ -61,18 +61,10 @@ export const FallingCaps = () => {
   ]
   return (
     <Container className={s.container}>
-      <h2>
-        We want to help make <br />
-        the internet <br />
-        <span>everything it can be.</span>
-      </h2>
-      {caps.map((style, index) => (
-        <Cap
-          key={index}
-          image={{ url: ASSETS.CAP.URL, style }}
-          model={ASSETS.CAP.MODEL}
-        />
-      ))}
+      <Cap
+        image={{ url: ASSETS.CAP.URL, style: caps[0] }}
+        model={ASSETS.CAP.MODEL}
+      />
     </Container>
   )
 }
