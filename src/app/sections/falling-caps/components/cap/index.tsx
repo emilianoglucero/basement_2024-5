@@ -12,13 +12,22 @@ import { ASSETS } from '~/constants/assets'
 import { StickyScrollScene } from '@14islands/r3f-scroll-rig/powerups'
 
 interface CapProps {
-  image: { url: string; style: React.CSSProperties }
+  image: { url: string }
   model: any
   index: number
   totalCaps: number
+  webglStyle?: React.CSSProperties
+  domStyle?: React.CSSProperties
 }
 
-export const Cap = ({ image, model, index, totalCaps }: CapProps) => {
+export const Cap = ({
+  image,
+  model,
+  index,
+  totalCaps,
+  webglStyle,
+  domStyle
+}: CapProps) => {
   const trackedElement = useRef<HTMLDivElement>(null!)
   const imgRef = useRef<HTMLImageElement>(null!)
   const { hasSmoothScrollbar } = useScrollRig()
@@ -34,6 +43,7 @@ export const Cap = ({ image, model, index, totalCaps }: CapProps) => {
             src={image.url}
             width={509}
             className={styles.hiddenWhenSmooth}
+            style={domStyle}
             onLoad={(event: React.SyntheticEvent<HTMLImageElement>) => {
               imgRef.current = event.target as HTMLImageElement
             }}
@@ -46,7 +56,7 @@ export const Cap = ({ image, model, index, totalCaps }: CapProps) => {
             {(props: ScrollSceneChildProps) => (
               <WebGLModel
                 model={model}
-                style={image.style}
+                style={webglStyle ?? {}}
                 index={index}
                 totalCaps={totalCaps}
                 {...props}
