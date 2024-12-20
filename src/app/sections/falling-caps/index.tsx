@@ -1,12 +1,18 @@
 'use client'
 
-import React, { CSSProperties } from 'react'
+import React, { CSSProperties, useMemo, useRef } from 'react'
 
 import { Container } from '~/components/layout/container'
 
 import s from './caps.module.scss'
 import { Cap } from './components/cap'
 import { ASSETS } from '~/constants/assets'
+import { shuffleArray } from './webgl-model'
+import { useIsomorphicLayoutEffect } from '~/hooks/use-isomorphic-layout-effect'
+import { gsap } from '~/lib/gsap'
+import { ScrollTrigger } from 'gsap/all'
+
+gsap.registerPlugin(ScrollTrigger)
 
 interface CapStyle extends CSSProperties {
   transform: string
@@ -59,20 +65,65 @@ export const FallingCaps = () => {
       right: '1%'
     }
   ]
+
+  const randomIndices = useMemo(() => {
+    const indices = Array.from({ length: caps.length }, (_, i) => i)
+    return shuffleArray(indices)
+  }, [])
+
+  const titleRef = useRef<HTMLDivElement>(null)
+  const subtitleRef = useRef<HTMLSpanElement>(null)
+
+  useIsomorphicLayoutEffect(() => {
+    if (!titleRef.current || !subtitleRef.current) return
+
+    const title = titleRef.current
+    const subtitle = subtitleRef.current
+    const trigger = document.getElementById('caps-section')
+
+    gsap.to(title, {
+      y: 0,
+      opacity: 1,
+      ease: 'power4.out',
+      duration: 2,
+      scrollTrigger: {
+        trigger: trigger,
+        start: 'top+=45% bottom',
+        end: 'bottom top'
+      }
+    })
+
+    gsap.to(subtitle, {
+      y: 0,
+      opacity: 1,
+      ease: 'power4.out',
+      duration: 1.5,
+      scrollTrigger: {
+        trigger: trigger,
+        start: 'top+=65% bottom',
+        end: 'bottom top'
+      }
+    })
+  }, [])
+
   return (
-    <Container className={s.container}>
+    <Container className={s.container} id="caps-section">
       <div className={s.textWrapper}>
         <h2>
-          We want to help make <br />
-          the internet <br />
-          <span>everything it can be.</span>
+          <strong ref={titleRef}>
+            We want to help make <br />
+            the internet <br />
+          </strong>
+          <span ref={subtitleRef}>everything it can be.</span>
         </h2>
       </div>
-      {caps.map((cap, index) => (
+      {caps.map((cap, i) => (
         <Cap
-          key={index}
+          key={i}
           image={{ url: ASSETS.CAP.URL, style: cap }}
           model={ASSETS.CAP.MODEL}
+          index={randomIndices[i] ?? i}
+          totalCaps={caps.length}
         />
       ))}
     </Container>
