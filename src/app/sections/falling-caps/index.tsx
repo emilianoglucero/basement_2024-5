@@ -1,6 +1,6 @@
 'use client'
 
-import React, { CSSProperties, useMemo, useRef } from 'react'
+import React, { useMemo, useRef } from 'react'
 
 import { Container } from '~/components/layout/container'
 
@@ -11,136 +11,12 @@ import { shuffleArray } from './webgl-model'
 import { useIsomorphicLayoutEffect } from '~/hooks/use-isomorphic-layout-effect'
 import { gsap } from '~/lib/gsap'
 import { ScrollTrigger } from 'gsap/all'
+import { CAPS_DATA } from './caps-data'
 
 gsap.registerPlugin(ScrollTrigger)
-
-interface CapStyle {
-  dom: CSSProperties & {
-    transform: string
-    top?: string
-    bottom?: string
-    left?: string
-    right?: string
-  }
-  webgl: CSSProperties & {
-    transform: string
-    top?: string
-    bottom?: string
-    left?: string
-    right?: string
-  }
-}
-
 export const FallingCaps = () => {
-  const caps: CapStyle[] = [
-    {
-      dom: {
-        position: 'absolute',
-        transform: 'translate(0, 0) scale(0.85) rotate(-25deg)',
-        top: '7%',
-        left: '3%'
-      },
-      webgl: {
-        transform: 'translate(0, 0) scale(0.85) rotate(-12deg)',
-        top: '7%',
-        left: '3%'
-      }
-    },
-    {
-      dom: {
-        position: 'absolute',
-        transform: 'translate(0, 0) scale(0.75) rotate(-22deg)',
-        top: '18%',
-        right: '12%'
-      },
-      webgl: {
-        transform: 'translate(0, 0) scale(0.75) rotate(-12deg)',
-        top: '18%',
-        right: '20%'
-      }
-    },
-    {
-      dom: {
-        position: 'absolute',
-        transform: 'translate(0, 0) scale(0.55) rotate(-28deg)',
-        bottom: '18%',
-        right: '35%'
-      },
-      webgl: {
-        transform: 'translate(0, 0) scale(0.55) rotate(-14deg)',
-        bottom: '18%',
-        right: '35%'
-      }
-    },
-    {
-      dom: {
-        position: 'absolute',
-        transform: 'translate(0, 0) scale(0.65) rotate(22deg)',
-        top: '2%',
-        right: '2%'
-      },
-      webgl: {
-        transform: 'translate(0, 0) scale(0.65) rotate(10deg)',
-        top: '2%',
-        right: '2%'
-      }
-    },
-    {
-      dom: {
-        position: 'absolute',
-        transform: 'translate(0, 0) rotate(22deg)',
-        top: '10%',
-        left: '35%'
-      },
-      webgl: {
-        transform: 'translate(0, 0) rotate(8deg)',
-        top: '10%',
-        left: '35%'
-      }
-    },
-    {
-      dom: {
-        position: 'absolute',
-        transform: 'translate(0, 0) scale(0.7) rotate(27deg)',
-        bottom: '7%',
-        left: '1%'
-      },
-      webgl: {
-        transform: 'translate(0, 0) scale(0.7) rotate(11deg)',
-        bottom: '7%',
-        left: '1%'
-      }
-    },
-    {
-      dom: {
-        position: 'absolute',
-        transform: 'translate(0, 0) scale(0.72) rotate(22deg)',
-        bottom: '1%',
-        left: '18%'
-      },
-      webgl: {
-        transform: 'translate(0, 0) scale(0.72) rotate(-14deg)',
-        bottom: '1%',
-        left: '28%'
-      }
-    },
-    {
-      dom: {
-        position: 'absolute',
-        transform: 'translate(0, 0) scale(0.85) rotate(-8deg)',
-        bottom: '1%',
-        right: '1%'
-      },
-      webgl: {
-        transform: 'translate(0, 0) scale(0.85) rotate(-12deg)',
-        bottom: '4%',
-        right: '1%'
-      }
-    }
-  ]
-
   const randomIndices = useMemo(() => {
-    const indices = Array.from({ length: caps.length }, (_, i) => i)
+    const indices = Array.from({ length: CAPS_DATA.length }, (_, i) => i)
     return shuffleArray(indices)
   }, [])
 
@@ -190,13 +66,13 @@ export const FallingCaps = () => {
           <span ref={subtitleRef}>everything it can be.</span>
         </h2>
       </div>
-      {caps.map((cap, i) => (
+      {CAPS_DATA.map((cap, i) => (
         <Cap
           key={i}
           image={{ url: ASSETS.CAP.URL }}
           model={ASSETS.CAP.MODEL}
           index={randomIndices[i] ?? i}
-          totalCaps={caps.length}
+          totalCaps={CAPS_DATA.length}
           webglStyle={cap.webgl}
           domStyle={cap.dom}
         />
