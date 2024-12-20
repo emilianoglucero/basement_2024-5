@@ -2,7 +2,7 @@
 
 .container {
   position: relative;
-  height: 500vh;
+  height: var(--falling-caps-section-height);
 
   @include respond-to('tablet') {
     height: 60vh;
@@ -25,13 +25,19 @@
   justify-content: center;
 
   h2 {
-    text-align: center;
     max-width: max-content;
     text-transform: uppercase;
     line-height: 1.2;
     font-family: var(--font-expanded);
     font-size: tovw(64px, 42px, 'desktop');
     font-weight: 900;
+
+    strong,
+    span {
+      display: block;
+      transform: translateY(50px);
+      opacity: 0;
+    }
 
     span {
       color: var(--color-orange);

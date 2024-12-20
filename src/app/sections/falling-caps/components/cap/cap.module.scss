@@ -12,7 +12,7 @@
       display: none;
     }
 
-    height: 500vh;
+    height: var(--falling-caps-section-height);
     position: relative;
 
     .stickyContent {
