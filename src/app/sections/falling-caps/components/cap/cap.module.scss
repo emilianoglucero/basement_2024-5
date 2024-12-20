@@ -1,10 +1,24 @@
 @import '~/css/helpers';
 
-.capContainer {
-  @include respond-to('tablet') {
-    display: none;
-  }
-
+.section {
   position: absolute;
-  width: tovw(320px, 220px, 'desktop');
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+
+  .stickyContainer {
+    @include respond-to('tablet') {
+      display: none;
+    }
+
+    height: var(--falling-caps-section-height);
+    position: relative;
+
+    .stickyContent {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+  }
 }
