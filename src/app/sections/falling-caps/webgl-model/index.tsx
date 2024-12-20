@@ -1,5 +1,5 @@
 import { Float, useGLTF } from '@react-three/drei'
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { GLTF } from 'three-stdlib'
 import * as THREE from 'three'
 
@@ -50,12 +50,14 @@ const convertCSSToWorldPosition = (style: React.CSSProperties) => {
     topPercent = 100 - parseFloat(style.bottom?.toString() || '0')
   }
 
-  // Map percentages to world coordinates
-  // left: 0% -> -6, 100% -> 6
-  const x = (leftPercent / 100) * 14 - 7
+  // use viewport aspect ratio to calculate world coordinates
+  const aspect = window.innerWidth / window.innerHeight
+  const viewportHeight = 6 // adjust this value to control the overall scale
+  const viewportWidth = viewportHeight * aspect
 
-  // top: 0% -> 3, 100% -> -3 (inverted because CSS top goes down)
-  const y = 3 - (topPercent / 100) * 6
+  // Map percentages to world coordinates
+  const x = (leftPercent / 100) * viewportWidth - viewportWidth / 2
+  const y = viewportHeight / 2 - (topPercent / 100) * viewportHeight
 
   return [x, y, 0] as [number, number, number]
 }
@@ -63,6 +65,23 @@ const convertCSSToWorldPosition = (style: React.CSSProperties) => {
 const WebGLModel = ({ model, scale, style }: WebGLModelProps) => {
   const meshRef = useRef<any>(null!)
   const { nodes, materials } = useGLTF(model) as unknown as GLTFResult
+  const [viewport, setViewport] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight
+  })
+
+  // handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setViewport({
+        width: window.innerWidth,
+        height: window.innerHeight
+      })
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // Extract transform values from style
   const transformValues = useMemo(() => {
@@ -72,8 +91,6 @@ const WebGLModel = ({ model, scale, style }: WebGLModelProps) => {
     return { scale: 1, rotation: 0 }
   }, [style?.transform])
 
-  console.log('rotation', transformValues.rotation)
-
   // Base scale for the model
   // TODO: review this
   const baseScale = Array.isArray(scale)
@@ -82,18 +99,19 @@ const WebGLModel = ({ model, scale, style }: WebGLModelProps) => {
 
   // Calculate final scale
   const finalScale = useMemo(() => {
-    const relativeScale = transformValues.scale * baseScale
+    const viewportScale = Math.min(viewport.width, viewport.height) / 1000 // Adjust divisor to control base scale
+    const relativeScale = transformValues.scale * baseScale * viewportScale
     return [relativeScale, relativeScale, relativeScale] as [
       number,
       number,
       number
     ]
-  }, [baseScale, transformValues.scale])
+  }, [baseScale, transformValues.scale, viewport])
 
   // Calculate position from CSS style
   const position = useMemo(() => {
     return convertCSSToWorldPosition(style)
-  }, [style])
+  }, [style, viewport])
 
   return (
     <group

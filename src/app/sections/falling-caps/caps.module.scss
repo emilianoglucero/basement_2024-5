@@ -10,6 +10,13 @@
 }
 
 .textWrapper {
+  @include respond-to('tablet') {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
   position: sticky;
   top: 0;
   height: 100vh;
