@@ -35,3 +35,5 @@ export const basementLog = `
 
 // TODO: add variable (NEXT_PUBLIC_GA_TRACKING_ID) to env if necessary
 export const gaTrackingId = process.env.NEXT_PUBLIC_GA_TRACKING_ID
+
+export const basementOrange = '#ff4d00'
