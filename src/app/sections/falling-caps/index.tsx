@@ -1,17 +1,17 @@
 'use client'
 
+import { ScrollTrigger } from 'gsap/all'
 import React, { useMemo, useRef } from 'react'
 
 import { Container } from '~/components/layout/container'
-
-import s from './caps.module.scss'
-import { Cap } from './components/cap'
 import { ASSETS } from '~/constants/assets'
-import { shuffleArray } from './webgl-model/utils'
 import { useIsomorphicLayoutEffect } from '~/hooks/use-isomorphic-layout-effect'
 import { gsap } from '~/lib/gsap'
-import { ScrollTrigger } from 'gsap/all'
+
+import s from './caps.module.scss'
 import { CAPS_DATA } from './caps-data'
+import { Cap } from './components/cap'
+import { shuffleArray } from './webgl-model/utils'
 
 gsap.registerPlugin(ScrollTrigger)
 export const FallingCaps = () => {

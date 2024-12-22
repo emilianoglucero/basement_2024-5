@@ -5,8 +5,8 @@ import Marquee from 'react-fast-marquee'
 
 import { Container } from '~/components/layout/container'
 
-import s from './hero.module.scss'
 import { AwwwardsTrophy } from './components/awwward-trophy'
+import s from './hero.module.scss'
 
 export const Hero = () => {
   return (

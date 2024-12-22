@@ -1,18 +1,19 @@
-import Image from 'next/image'
-import React, { useRef } from 'react'
 import {
   ScrollScene,
   styles,
   UseCanvas,
   useScrollRig
 } from '@14islands/r3f-scroll-rig'
+import Image from 'next/image'
+import React, { useRef } from 'react'
 
-import s from './footer-gallery-item.module.scss'
-import { GalleryImage } from '~/ts/gallery'
 import { WebGLPixelatedImage } from '~/components/three/images/webgl-pixelated-image/webgl-pixelated-image'
 import { ASSETS } from '~/constants/assets'
 import { useDeviceDetect } from '~/hooks/use-device-detect'
 import { basementOrange } from '~/lib/constants'
+import { GalleryImage } from '~/ts/gallery'
+
+import s from './footer-gallery-item.module.scss'
 
 interface FooterGalleryItemProps {
   image: GalleryImage

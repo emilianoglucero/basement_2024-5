@@ -1,15 +1,16 @@
 import {
+  ScrollSceneChildProps,
   styles,
   UseCanvas,
-  useScrollRig,
-  ScrollSceneChildProps
-} from '@14islands/r3f-scroll-rig'
+  useScrollRig} from '@14islands/r3f-scroll-rig'
+import { StickyScrollScene } from '@14islands/r3f-scroll-rig/powerups'
 import Image from 'next/image'
 import { useRef } from 'react'
-import s from './cap.module.scss'
-import WebGLModel from '../../webgl-model'
+
 import { ASSETS } from '~/constants/assets'
-import { StickyScrollScene } from '@14islands/r3f-scroll-rig/powerups'
+
+import WebGLModel from '../../webgl-model'
+import s from './cap.module.scss'
 
 interface CapProps {
   image: { url: string }

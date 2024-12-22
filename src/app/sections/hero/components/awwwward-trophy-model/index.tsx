@@ -1,11 +1,11 @@
-import { useFrame } from '@react-three/fiber'
-
 import { Float, useGLTF } from '@react-three/drei'
+import { useFrame } from '@react-three/fiber'
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { GLTF } from 'three-stdlib'
-import { EASE, gsap } from '~/lib/gsap'
+
 import { useIsomorphicLayoutEffect } from '~/hooks/use-isomorphic-layout-effect'
+import { EASE, gsap } from '~/lib/gsap'
 
 interface GLTFResult extends GLTF {
   nodes: {

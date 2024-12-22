@@ -1,11 +1,11 @@
 import React from 'react'
 
 import { Container } from '~/components/layout/container'
-import { GalleryItem } from './components/gallery-item'
+import { ASSETS } from '~/constants/assets'
 import type { GalleryImage } from '~/ts/gallery'
 
+import { GalleryItem } from './components/gallery-item'
 import s from './gallery.module.scss'
-import { ASSETS } from '~/constants/assets'
 
 export const Gallery = () => {
   const images: GalleryImage[] = [

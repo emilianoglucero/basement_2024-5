@@ -1,6 +1,6 @@
 const siteURL = new URL(process.env.NEXT_PUBLIC_SITE_URL)
 
-module.exports = {
+export default {
   siteUrl: siteURL.href,
   generateRobotsTxt: true,
   exclude: []

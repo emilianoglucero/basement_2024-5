@@ -1,13 +1,14 @@
 import { useImageAsTexture } from '@14islands/r3f-scroll-rig'
-import { useState, useRef, useEffect } from 'react'
-import { extend, useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
 import { shaderMaterial } from '@react-three/drei'
+import { extend, useFrame } from '@react-three/fiber'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useEffect, useRef, useState } from 'react'
+import * as THREE from 'three'
+
 import { useIsomorphicLayoutEffect } from '~/hooks/use-isomorphic-layout-effect'
+import { basementOrange } from '~/lib/constants'
 import { gsap } from '~/lib/gsap'
 import { pixelatedlEffect, PIXELS } from '~/lib/shaders/effects/pixelated'
-import ScrollTrigger from 'gsap/ScrollTrigger'
-import { basementOrange } from '~/lib/constants'
 gsap.registerPlugin(ScrollTrigger)
 
 interface WebGLPixelatedImageProps {
@@ -52,7 +53,7 @@ const CustomImageMaterial = shaderMaterial(
 
 extend({ CustomImageMaterial })
 
-declare global {
+declare module 'react' {
   namespace JSX {
     interface IntrinsicElements {
       customImageMaterial: {
@@ -230,7 +231,7 @@ export const WebGLPixelatedImage = ({
           )
         }
         uProgress={0}
-        uEffectType={uEffectType}
+        uEffectType={uEffectType ?? 0}
         uMouse={new THREE.Vector2()}
         uPrevMouse={new THREE.Vector2()}
       />

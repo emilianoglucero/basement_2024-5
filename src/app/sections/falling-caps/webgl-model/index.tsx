@@ -1,17 +1,18 @@
 import { Float, useGLTF } from '@react-three/drei'
+import { ScrollTrigger } from 'gsap/all'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
+
 import { useIsomorphicLayoutEffect } from '~/hooks/use-isomorphic-layout-effect'
 import { gsap } from '~/lib/gsap'
-import { ScrollTrigger } from 'gsap/all'
-import {
-  extractTransformValues,
-  calculateFinalScale,
-  calculateBaseScale,
-  convertCSSToWebGLPosition
-} from './utils'
+
 import { calculateAnimationTimings } from './animation'
 import { GLTFResult, WebGLModelProps } from './types'
+import {
+  calculateBaseScale,
+  calculateFinalScale,
+  convertCSSToWebGLPosition,
+  extractTransformValues} from './utils'
 
 gsap.registerPlugin(ScrollTrigger)
 

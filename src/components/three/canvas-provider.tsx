@@ -1,7 +1,8 @@
 'use client'
+import '@14islands/r3f-scroll-rig/css'
+
 import { GlobalCanvas, SmoothScrollbar } from '@14islands/r3f-scroll-rig'
 import { useRef } from 'react'
-import '@14islands/r3f-scroll-rig/css'
 
 export function CanvasProvider({ children }: { children: React.ReactNode }) {
   const eventSource = useRef<HTMLDivElement>(null!)

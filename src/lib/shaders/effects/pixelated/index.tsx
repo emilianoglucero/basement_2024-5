@@ -1,7 +1,9 @@
-import { vertex } from './vertex'
-import { fragment } from './fragment'
 import * as THREE from 'three'
+
 import { basementOrange } from '~/lib/constants'
+
+import { fragment } from './fragment'
+import { vertex } from './vertex'
 export const pixelatedlEffect = {
   uTime: 0,
   uFillColor: new THREE.Color(basementOrange),

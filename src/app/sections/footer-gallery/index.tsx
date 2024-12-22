@@ -1,11 +1,11 @@
 import React from 'react'
 
 import { Container } from '~/components/layout/container'
-import { FooterGalleryItem } from './components/footer-galllery-item/footer-gallery-item'
+import { ASSETS } from '~/constants/assets'
 import type { GalleryImage } from '~/ts/gallery'
 
+import { FooterGalleryItem } from './components/footer-galllery-item/footer-gallery-item'
 import s from './footer-gallery.module.scss'
-import { ASSETS } from '~/constants/assets'
 
 export const FooterGallery = () => {
   const images: GalleryImage[] = [
