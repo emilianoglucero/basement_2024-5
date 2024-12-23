@@ -8,8 +8,6 @@ import { Footer } from '~/components/common/footer'
 import { Header } from '~/components/common/header'
 
 import { AppHooks } from './app-hooks'
-import { CanvasWrapper } from '~/components/three/canvas-wrapper'
-
 const basementGrotesque = localFont({
   src: '../fonts/BasementGrotesque-Black_v1.202.woff2',
   display: 'swap',
@@ -68,12 +66,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           basementGrotesqueExpanded.variable
         )}
       >
-        <CanvasWrapper>
-          <Header />
-          {children}
-          <Footer />
-          <AppHooks />
-        </CanvasWrapper>
+        <Header />
+        {children}
+        <Footer />
+        <AppHooks />
       </body>
     </html>
   )
