@@ -15,10 +15,7 @@ export function CanvasProvider({ children }: { children: React.ReactNode }) {
         scaleMultiplier={0.01}
         camera={{ fov: 33 }}
         style={{ pointerEvents: 'none', zIndex: 100 }}
-      >
-        <ambientLight intensity={0.5} />
-      </GlobalCanvas>
-
+      />
       <SmoothScrollbar
         config={{
           easing: (t: number) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
