@@ -3,6 +3,7 @@
 import { useState, Component, ErrorInfo, ReactNode } from 'react'
 import { useIsomorphicLayoutEffect } from '~/hooks/use-isomorphic-layout-effect'
 import { CanvasProvider } from './canvas-provider'
+import { isDev } from '~/lib/constants'
 
 class CanvasErrorBoundary extends Component<
   { children: ReactNode },
@@ -18,7 +19,12 @@ class CanvasErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.warn('[Canvas Error]', error, errorInfo)
+    console.error('[Canvas Error]', {
+      error,
+      errorInfo,
+      timestamp: new Date().toISOString(),
+      url: window.location.href
+    })
   }
 
   render() {
@@ -34,19 +40,19 @@ export const CanvasWrapper = ({ children }: { children: React.ReactNode }) => {
   const [isMounted, setIsMounted] = useState(false)
 
   useIsomorphicLayoutEffect(() => {
-    console.warn('[CanvasWrapper] Mounting canvas...')
+    if (isDev) console.debug('[CanvasWrapper] Mounting canvas...')
     setIsMounted(true)
     return () => {
-      console.warn('[CanvasWrapper] Unmounting canvas...')
+      if (isDev) console.debug('[CanvasWrapper] Unmounting canvas...')
     }
   }, [])
 
   if (!isMounted) {
-    console.warn('[CanvasWrapper] Canvas not yet mounted')
+    if (isDev) console.debug('[CanvasWrapper] Canvas not yet mounted')
     return <>{children}</>
   }
 
-  console.warn('[CanvasWrapper] Canvas mounted successfully')
+  if (isDev) console.debug('[CanvasWrapper] Canvas mounted successfully')
   return <CanvasProvider>{children}</CanvasProvider>
 }
 
