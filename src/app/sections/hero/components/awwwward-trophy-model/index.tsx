@@ -31,7 +31,7 @@ function Pointer({ size = 0.5, vec = new THREE.Vector3() }) {
       vec.set(
         (pointer.x * viewport.width) / 2,
         (pointer.y * viewport.height) / 2,
-        1
+        1.5
       )
     )
   })
@@ -63,7 +63,7 @@ const AwwwardsTrophyModel = ({
   const initialRotation = -0.15
 
   // define the target position where the trophy should return to
-  const targetPosition = new THREE.Vector3(6, -2, 1)
+  const targetPosition = new THREE.Vector3(6, -2, 2)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -133,7 +133,7 @@ const AwwwardsTrophyModel = ({
           friction={1}
           mass={1}
           position={targetPosition.toArray()}
-          enabledRotations={[false, true, false]}
+          enabledRotations={[true, true, true]}
         >
           <group scale={minScale}>
             <group ref={meshRef} rotation-y={initialRotation} dispose={null}>
