@@ -3,9 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { GLTF } from 'three-stdlib'
-
-import { useIsomorphicLayoutEffect } from '~/hooks/use-isomorphic-layout-effect'
-import { EASE, gsap } from '~/lib/gsap'
+import { BallCollider, CuboidCollider, RigidBody } from '@react-three/rapier'
 
 interface GLTFResult extends GLTF {
   nodes: {
@@ -26,16 +24,49 @@ interface TrophyModelProps {
   }
 }
 
-const AwwwardsTrophyModel = ({ scale, model }: TrophyModelProps) => {
+function Pointer({ size = 0.5, vec = new THREE.Vector3() }) {
+  const ref = useRef<RAPIER.RigidBodyApi>(null!)
+  useFrame(({ pointer, viewport }) => {
+    ref.current?.setNextKinematicTranslation(
+      vec.set(
+        (pointer.x * viewport.width) / 2,
+        (pointer.y * viewport.height) / 2,
+        1
+      )
+    )
+  })
+  return (
+    <RigidBody type="kinematicPosition" colliders={false} ref={ref}>
+      <BallCollider args={[size]} />
+      <mesh visible={false}>
+        <sphereGeometry args={[size, 16, 64]} />
+        <meshBasicMaterial color="indianred" />
+      </mesh>
+    </RigidBody>
+  )
+}
+
+const AwwwardsTrophyModel = ({
+  scale,
+  model,
+  scrollState,
+  ...props
+}: TrophyModelProps) => {
+  const rigidBody = useRef<RAPIER.RigidBodyApi>(null!)
   const meshRef = useRef<THREE.Group>(null!)
   const { nodes, materials } = useGLTF(model) as unknown as GLTFResult
   const [scrollY, setScrollY] = useState(0)
 
+  const vec = new THREE.Vector3()
+  const ang = new THREE.Vector3()
+  const rot = new THREE.Vector3()
   const initialRotation = -0.15
+
+  // define the target position where the trophy should return to
+  const targetPosition = new THREE.Vector3(6, -2, 1)
 
   useEffect(() => {
     const handleScroll = () => {
-      // get normalized scroll position (0 to 1)
       const maxScroll =
         document.documentElement.scrollHeight - window.innerHeight
       const normalized = window.scrollY / maxScroll
@@ -46,92 +77,80 @@ const AwwwardsTrophyModel = ({ scale, model }: TrophyModelProps) => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  useFrame(() => {
-    if (meshRef.current) {
-      // interpolate smoothly between current rotation and target rotation
-      const targetRotation = initialRotation + scrollY * Math.PI * 10
-      meshRef.current.rotation.y = THREE.MathUtils.lerp(
-        meshRef.current.rotation.y,
-        targetRotation,
-        0.1
-      )
-    }
+  useFrame((state, delta) => {
+    if (!meshRef.current || !rigidBody.current) return
+
+    delta = Math.min(0.1, delta)
+
+    // apply scroll-based rotation to visual mesh
+    const targetRotation = initialRotation + scrollY * Math.PI * 10
+    meshRef.current.rotation.y = THREE.MathUtils.lerp(
+      meshRef.current.rotation.y,
+      targetRotation,
+      0.1
+    )
+
+    // get current position
+    const currentPosition = rigidBody.current.translation()
+    vec.set(currentPosition.x, currentPosition.y, currentPosition.z)
+
+    // calculate direction to target position
+    const direction = vec.subVectors(targetPosition, vec)
+    const distance = direction.length()
+
+    // apply force proportional to distance
+    const forceMagnitude = Math.min(distance * 10, 10) // force
+    rigidBody.current.applyImpulse(
+      direction.normalize().multiplyScalar(forceMagnitude),
+      true
+    )
+
+    // Stabilize rotation
+    ang.copy(rigidBody.current.angvel())
+    rot.copy(rigidBody.current.rotation())
+    rigidBody.current.setAngvel({
+      x: ang.x - rot.x * 5,
+      y: ang.y - rot.y * 5,
+      z: ang.z - rot.z * 5
+    })
   })
-
-  useIsomorphicLayoutEffect(() => {
-    materials.m_Trophy3.transparent = true
-    materials.m_Outline.transparent = true
-
-    materials.m_Trophy3.opacity = 0
-    materials.m_Outline.opacity = 0
-
-    if (meshRef.current) {
-      meshRef.current.scale.set(0.2, 0.2, 0.2)
-      meshRef.current.rotation.set(0, initialRotation - Math.PI * 4, 0)
-      meshRef.current.position.x = 4
-    }
-
-    const tl = gsap.timeline({
-      delay: 0.2,
-      ease: EASE
-    })
-
-    tl.to(meshRef.current.position, {
-      x: 0,
-      duration: 1.4,
-      ease: 'power3.out'
-    })
-      .to(
-        meshRef.current.scale,
-        {
-          x: 1,
-          y: 1,
-          z: 1,
-          duration: 1.2,
-          ease: 'elastic.out(1, 0.75)'
-        },
-        '<0.1'
-      )
-      .to(
-        meshRef.current.rotation,
-        {
-          y: initialRotation,
-          duration: 1.6,
-          ease: 'elastic.out(0.5, 0.3)',
-          delay: 0.4
-        },
-        '<0.1'
-      )
-      .to(
-        [materials.m_Trophy3, materials.m_Outline],
-        {
-          opacity: 1,
-          duration: 1,
-          stagger: 0.1
-        },
-        '<'
-      )
-  }, [materials, initialRotation])
 
   const minScale = Array.isArray(scale)
     ? Math.min(scale[0], scale[1])
     : Math.min(scale.x, scale.y)
 
   return (
-    <group scale={minScale}>
+    <>
+      <Pointer size={0.2} />
       <Float speed={0.8} rotationIntensity={0.4} floatIntensity={0.65}>
-        <group ref={meshRef} rotation-y={initialRotation} dispose={null}>
-          <mesh
-            geometry={nodes.Cube001.geometry}
-            material={materials.m_Trophy3}
-          />
-          <mesh
-            geometry={nodes.Cube001_1.geometry}
-            material={materials.m_Outline}
-          />
-        </group>
+        <RigidBody
+          ref={rigidBody}
+          type="dynamic"
+          colliders={false}
+          linearDamping={6}
+          angularDamping={4}
+          restitution={0}
+          friction={1}
+          mass={1}
+          position={targetPosition.toArray()}
+          enabledRotations={[false, true, false]}
+        >
+          <group scale={minScale}>
+            <group ref={meshRef} rotation-y={initialRotation} dispose={null}>
+              <mesh
+                geometry={nodes.Cube001.geometry}
+                material={materials.m_Trophy3}
+              />
+              <mesh
+                geometry={nodes.Cube001_1.geometry}
+                material={materials.m_Outline}
+              />
+            </group>
+          </group>
+          <CuboidCollider args={[1, 1.65, 1]} position={[0, 0.5, 0]} />
+        </RigidBody>
       </Float>
-    </group>
+    </>
   )
 }
 

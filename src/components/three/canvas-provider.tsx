@@ -2,7 +2,8 @@
 import '@14islands/r3f-scroll-rig/css'
 
 import { GlobalCanvas, SmoothScrollbar } from '@14islands/r3f-scroll-rig'
-import { useRef } from 'react'
+import { Suspense, useRef } from 'react'
+import { Physics } from '@react-three/rapier'
 
 export function CanvasProvider({ children }: { children: React.ReactNode }) {
   const eventSource = useRef<HTMLDivElement>(null!)
@@ -16,7 +17,20 @@ export function CanvasProvider({ children }: { children: React.ReactNode }) {
         camera={{ fov: 33 }}
         style={{ pointerEvents: 'none', zIndex: 100 }}
       >
-        <ambientLight intensity={0.5} />
+        {(globalChildren) => (
+          <>
+            <Suspense fallback={null}>
+              <Physics
+                gravity={[0, 0, 0]}
+                debug
+                timeStep="vary"
+                updatePriority={-100}
+              >
+                {globalChildren}
+              </Physics>
+            </Suspense>
+          </>
+        )}
       </GlobalCanvas>
 
       <SmoothScrollbar
