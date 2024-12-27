@@ -4,6 +4,7 @@ import '@14islands/r3f-scroll-rig/css'
 import { GlobalCanvas, SmoothScrollbar } from '@14islands/r3f-scroll-rig'
 import { useEffect, useRef, useState } from 'react'
 import { useAppStore } from '~/context/use-app-store'
+import { useDeviceDetect } from '~/hooks/use-device-detect'
 
 export function CanvasProvider({ children }: { children: React.ReactNode }) {
   const eventSource = useRef<HTMLDivElement>(null!)
@@ -17,6 +18,7 @@ export function CanvasProvider({ children }: { children: React.ReactNode }) {
   if (!isMounted || !fontsLoaded) {
     return <div ref={eventSource}>{children}</div>
   }
+  const isMobile = useDeviceDetect().isMobile
 
   return (
     <div ref={eventSource}>
@@ -28,12 +30,12 @@ export function CanvasProvider({ children }: { children: React.ReactNode }) {
         style={{ pointerEvents: 'none', zIndex: 100 }}
       />
       <SmoothScrollbar
+        enabled={!isMobile}
         config={{
           easing: (t: number) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
           direction: 'vertical',
           smooth: true,
-          smoothTouch: false,
-          touchMultiplier: 2
+          smoothTouch: false
         }}
       >
         {(bind) => <main {...bind}>{children}</main>}
