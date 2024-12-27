@@ -153,7 +153,7 @@ export const fragment = `
 
         vec4 defaultColor = texture2D(uTexture, uv);
 
-        // first transition
+        // horizontal transition
         if(uEffectType==0.){
           
           // pixelize
@@ -194,6 +194,7 @@ export const fragment = `
           gl_FragColor.rgb = mix( gl_FragColor.rgb,fillColor, fillGradient);
           gl_FragColor.rgb = mix( gl_FragColor.rgb,defaultColor.rgb, finalProgress);
 
+        // vertical transition
         }else if(uEffectType==1.){
 
           float s = 120.;
@@ -235,7 +236,7 @@ export const fragment = `
           gl_FragColor = vec4(finalColor,p0_);
         }
           
-        // end of first transition
+        // end of transition
 
         // will be 0 until uProgress > 1
         float postEffectProgress = clamp(uProgress,0.0,1.0);
