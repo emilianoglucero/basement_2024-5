@@ -2,7 +2,8 @@ import {
   ScrollSceneChildProps,
   styles,
   UseCanvas,
-  useScrollRig} from '@14islands/r3f-scroll-rig'
+  useScrollRig
+} from '@14islands/r3f-scroll-rig'
 import { StickyScrollScene } from '@14islands/r3f-scroll-rig/powerups'
 import Image from 'next/image'
 import { useRef } from 'react'
@@ -34,7 +35,7 @@ export const Cap = ({
   const { hasSmoothScrollbar } = useScrollRig()
 
   return (
-    <section className={s.section}>
+    <div className={s.section}>
       <div className={s.stickyContainer}>
         <div className={s.stickyContent} ref={trackedElement}>
           <Image
@@ -66,6 +67,6 @@ export const Cap = ({
           </StickyScrollScene>
         </UseCanvas>
       )}
-    </section>
+    </div>
   )
 }
