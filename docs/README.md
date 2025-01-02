@@ -1,10 +1,11 @@
 # Creative Dev Challenge Documentation
 
 ## Directory Structure
-
+```
 /docs
 ├── evaluations/ # Detailed evaluation documents
 └── README.md # This file
+```
 
 ## Quick Links
 
