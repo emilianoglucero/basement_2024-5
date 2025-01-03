@@ -20,14 +20,6 @@ export function CanvasProvider({ children }: { children: React.ReactNode }) {
     return <div ref={eventSource}>{children}</div>
   }
 
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  if (!isMounted || !fontsLoaded) {
-    return <div ref={eventSource}>{children}</div>
-  }
-
   return (
     <div ref={eventSource}>
       <GlobalCanvas
