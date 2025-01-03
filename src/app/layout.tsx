@@ -8,6 +8,7 @@ import { Footer } from '~/components/common/footer'
 import { Header } from '~/components/common/header'
 
 import { AppHooks } from './app-hooks'
+import { CanvasProvider } from '~/components/three/canvas-provider'
 const basementGrotesque = localFont({
   src: '../fonts/BasementGrotesque-Black_v1.202.woff2',
   display: 'swap',
@@ -56,21 +57,23 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
-      <body
-        suppressHydrationWarning
-        style={{ opacity: 0 }}
-        className={clsx(
-          basementGrotesque.variable,
-          neueMontreal.variable,
-          basementGrotesqueDisplay.variable,
-          basementGrotesqueExpanded.variable
-        )}
-      >
-        <Header />
-        {children}
-        <Footer />
-        <AppHooks />
-      </body>
+      <CanvasProvider>
+        <body
+          suppressHydrationWarning
+          style={{ opacity: 0 }}
+          className={clsx(
+            basementGrotesque.variable,
+            neueMontreal.variable,
+            basementGrotesqueDisplay.variable,
+            basementGrotesqueExpanded.variable
+          )}
+        >
+          <Header />
+          {children}
+          <Footer />
+          <AppHooks />
+        </body>
+      </CanvasProvider>
     </html>
   )
 }
