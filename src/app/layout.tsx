@@ -57,23 +57,23 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
-      <CanvasProvider>
-        <body
-          suppressHydrationWarning
-          style={{ opacity: 0 }}
-          className={clsx(
-            basementGrotesque.variable,
-            neueMontreal.variable,
-            basementGrotesqueDisplay.variable,
-            basementGrotesqueExpanded.variable
-          )}
-        >
+      <body
+        suppressHydrationWarning
+        style={{ opacity: 0 }}
+        className={clsx(
+          basementGrotesque.variable,
+          neueMontreal.variable,
+          basementGrotesqueDisplay.variable,
+          basementGrotesqueExpanded.variable
+        )}
+      >
+        <CanvasProvider>
           <Header />
           {children}
           <Footer />
           <AppHooks />
-        </body>
-      </CanvasProvider>
+        </CanvasProvider>
+      </body>
     </html>
   )
 }
