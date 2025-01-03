@@ -2,10 +2,21 @@
 import '@14islands/r3f-scroll-rig/css'
 
 import { GlobalCanvas, SmoothScrollbar } from '@14islands/r3f-scroll-rig'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useAppStore } from '~/context/use-app-store'
 
 export function CanvasProvider({ children }: { children: React.ReactNode }) {
   const eventSource = useRef<HTMLDivElement>(null!)
+  const [isMounted, setIsMounted] = useState(false)
+  const fontsLoaded = useAppStore((state) => state.fontsLoaded)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  if (!isMounted || !fontsLoaded) {
+    return <div ref={eventSource}>{children}</div>
+  }
 
   return (
     <div ref={eventSource}>
