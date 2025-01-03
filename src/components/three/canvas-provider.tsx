@@ -8,6 +8,7 @@ import { useDeviceDetect } from '~/hooks/use-device-detect'
 export function CanvasProvider({ children }: { children: React.ReactNode }) {
   const eventSource = useRef<HTMLDivElement>(null!)
   const isMobile = useDeviceDetect().isMobile
+
   return (
     <div ref={eventSource}>
       <GlobalCanvas
