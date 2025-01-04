@@ -16,9 +16,9 @@ export function CanvasProvider({ children }: { children: React.ReactNode }) {
   const { progress } = useProgress()
   console.log(progress)
 
-  if (!isHydrated || !fontsLoaded)
+  if (!isHydrated || !fontsLoaded) {
     return <div ref={eventSource}>{children}</div>
-
+  }
   return (
     <div ref={eventSource}>
       <GlobalCanvas
