@@ -2,7 +2,7 @@
 import '@14islands/r3f-scroll-rig/css'
 
 import { GlobalCanvas, SmoothScrollbar } from '@14islands/r3f-scroll-rig'
-import { Suspense, useRef } from 'react'
+import { useRef } from 'react'
 import { useDeviceDetect } from '~/hooks/use-device-detect'
 import { useAppStore } from '~/context/use-app-store'
 import { useIsHydrated } from '../../hooks/use-is-hydrated'
