@@ -5,7 +5,7 @@ import {
   useScrollRig
 } from '@14islands/r3f-scroll-rig'
 import Image from 'next/image'
-import React, { useRef } from 'react'
+import React, { Suspense, useRef } from 'react'
 
 import { WebGLPixelatedImage } from '~/components/three/images/webgl-pixelated-image/webgl-pixelated-image'
 import { ASSETS } from '~/constants/assets'
@@ -42,19 +42,21 @@ export const GalleryItem = ({ image }: GalleryItemProps) => {
         <UseCanvas>
           <ScrollScene track={trackedElement}>
             {(scrollState) => (
-              <WebGLPixelatedImage
-                uEffectType={0}
-                imgRef={imgRef}
-                scale={scrollState.scale}
-                fillColor={basementOrange}
-                animation={{
-                  duration: 2,
-                  delay: 0.1,
-                  hoverIntensity: 1.5,
-                  hoverEaseFactor: 0.15,
-                  mouseEaseFactor: 0.05
-                }}
-              />
+              <Suspense fallback={null}>
+                <WebGLPixelatedImage
+                  uEffectType={0}
+                  imgRef={imgRef}
+                  scale={scrollState.scale}
+                  fillColor={basementOrange}
+                  animation={{
+                    duration: 2,
+                    delay: 0.1,
+                    hoverIntensity: 1.5,
+                    hoverEaseFactor: 0.15,
+                    mouseEaseFactor: 0.05
+                  }}
+                />
+              </Suspense>
             )}
           </ScrollScene>
         </UseCanvas>
