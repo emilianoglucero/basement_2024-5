@@ -40,8 +40,8 @@ const AwwwardsTrophyModel = ({ scale, model }: TrophyModelProps) => {
     materials.m_Outline.opacity = 0
 
     if (meshRef.current) {
-      meshRef.current.scale.set(0.2, 0.2, 0.2)
-      meshRef.current.rotation.set(0, initialRotation - Math.PI, 0)
+      meshRef.current.scale.set(0.1, 0.1, 0.1)
+      meshRef.current.rotation.set(0, initialRotation + 0.35, 0)
       meshRef.current.position.x = 4
     }
 
