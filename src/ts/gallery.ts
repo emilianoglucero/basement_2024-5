@@ -1,6 +1,7 @@
-import { CSSProperties } from 'react'
-
-export type GalleryImage = {
+export interface GalleryImage {
   url: string
-  style: CSSProperties
+  style: {
+    gridArea: string
+    viewportPorcentage: number
+  }
 }

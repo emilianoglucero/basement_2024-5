@@ -12,13 +12,15 @@ export const FooterGallery = () => {
     {
       url: ASSETS.GALLERY.IMAGES[3].URL,
       style: {
-        gridArea: '1 / 1 / 2 / 6'
+        gridArea: '1 / 1 / 2 / 6',
+        viewportPorcentage: 41.67
       }
     },
     {
       url: ASSETS.GALLERY.IMAGES[4].URL,
       style: {
-        gridArea: '1 / 6 / 2 / 13'
+        gridArea: '1 / 6 / 2 / 13',
+        viewportPorcentage: 58.33
       }
     }
   ]

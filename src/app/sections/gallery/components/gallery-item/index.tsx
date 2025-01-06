@@ -11,6 +11,7 @@ import { WebGLPixelatedImage } from '~/components/three/images/webgl-pixelated-i
 import { ASSETS } from '~/constants/assets'
 import { basementOrange } from '~/lib/constants'
 import { GalleryImage } from '~/ts/gallery'
+import { getImageSizes } from '~/lib/utils/image'
 
 import s from './gallery-item.module.scss'
 
@@ -23,6 +24,8 @@ export const GalleryItem = ({ image }: GalleryItemProps) => {
   const imgRef = useRef<HTMLImageElement>(null!)
   const { hasSmoothScrollbar } = useScrollRig()
 
+  const sizes = getImageSizes(image.style.viewportPorcentage)
+
   return (
     <>
       <div ref={trackedElement} className={s.container} style={image.style}>
@@ -31,6 +34,7 @@ export const GalleryItem = ({ image }: GalleryItemProps) => {
           src={image.url}
           fill
           priority
+          sizes={sizes}
           className={styles.hiddenWhenSmooth}
           onLoad={(event: React.SyntheticEvent<HTMLImageElement>) => {
             imgRef.current = event.target as HTMLImageElement
