@@ -5,7 +5,7 @@ import {
   useScrollRig
 } from '@14islands/r3f-scroll-rig'
 import Image from 'next/image'
-import React, { useRef } from 'react'
+import React, { Suspense, useRef } from 'react'
 
 import { WebGLPixelatedImage } from '~/components/three/images/webgl-pixelated-image/webgl-pixelated-image'
 import { ASSETS } from '~/constants/assets'
@@ -45,24 +45,26 @@ export const FooterGalleryItem = ({ image }: FooterGalleryItemProps) => {
               const trigger =
                 document.getElementById('footer-gallery-section') || undefined
               return (
-                <WebGLPixelatedImage
-                  imgRef={imgRef}
-                  scale={scrollState.scale}
-                  uEffectType={1}
-                  fillColor={basementOrange}
-                  animation={{
-                    duration: 3,
-                    delay: 0.2,
-                    hoverIntensity: 1.5,
-                    hoverEaseFactor: 0.15,
-                    mouseEaseFactor: 0.05,
-                    scroll: {
-                      trigger: trigger,
-                      start: 'bottom bottom',
-                      end: 'bottom bottom'
-                    }
-                  }}
-                />
+                <Suspense fallback={null}>
+                  <WebGLPixelatedImage
+                    imgRef={imgRef}
+                    scale={scrollState.scale}
+                    uEffectType={1}
+                    fillColor={basementOrange}
+                    animation={{
+                      duration: 3,
+                      delay: 0.2,
+                      hoverIntensity: 1.5,
+                      hoverEaseFactor: 0.15,
+                      mouseEaseFactor: 0.05,
+                      scroll: {
+                        trigger: trigger,
+                        start: 'bottom bottom',
+                        end: 'bottom bottom'
+                      }
+                    }}
+                  />
+                </Suspense>
               )
             }}
           </ScrollScene>

@@ -6,7 +6,7 @@ import {
 } from '@14islands/r3f-scroll-rig'
 import { StickyScrollScene } from '@14islands/r3f-scroll-rig/powerups'
 import Image from 'next/image'
-import { useRef } from 'react'
+import { Suspense, useRef } from 'react'
 
 import { ASSETS } from '~/constants/assets'
 
@@ -56,13 +56,15 @@ export const Cap = ({
         <UseCanvas>
           <StickyScrollScene track={trackedElement}>
             {(props: ScrollSceneChildProps) => (
-              <WebGLModel
-                model={model}
-                style={webglStyle ?? {}}
-                index={index}
-                totalCaps={totalCaps}
-                {...props}
-              />
+              <Suspense fallback={null}>
+                <WebGLModel
+                  model={model}
+                  style={webglStyle ?? {}}
+                  index={index}
+                  totalCaps={totalCaps}
+                  {...props}
+                />
+              </Suspense>
             )}
           </StickyScrollScene>
         </UseCanvas>

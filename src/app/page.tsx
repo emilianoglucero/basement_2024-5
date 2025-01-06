@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 import { FallingCaps } from './sections/falling-caps'
 import { FooterGallery } from './sections/footer-gallery'
@@ -8,12 +8,12 @@ import { Hero } from './sections/hero'
 
 const HomePage = () => {
   return (
-    <>
+    <Suspense fallback={null}>
       <Hero />
       <Gallery />
       <FallingCaps />
       <FooterGallery />
-    </>
+    </Suspense>
   )
 }
 

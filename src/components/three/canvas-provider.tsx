@@ -17,9 +17,7 @@ export function CanvasProvider({ children }: { children: React.ReactNode }) {
         scaleMultiplier={0.01}
         camera={{ fov: 33 }}
         style={{ pointerEvents: 'none', zIndex: 100 }}
-      >
-        <ambientLight intensity={0.5} />
-      </GlobalCanvas>
+      />
 
       <SmoothScrollbar
         enabled={!isMobile}
