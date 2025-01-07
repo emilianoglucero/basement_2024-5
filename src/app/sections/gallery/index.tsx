@@ -13,21 +13,21 @@ export const Gallery = () => {
       url: ASSETS.GALLERY.IMAGES[0].URL,
       style: {
         gridArea: '1 / 1 / 1 / 13',
-        viewportPorcentage: 100
+        columns: 12
       }
     },
     {
       url: ASSETS.GALLERY.IMAGES[1].URL,
       style: {
         gridArea: '2 / 1 / 3 / 9',
-        viewportPorcentage: 66.67
+        columns: 8
       }
     },
     {
       url: ASSETS.GALLERY.IMAGES[2].URL,
       style: {
         gridArea: '2 / 9 / 3 / 13',
-        viewportPorcentage: 33.33
+        columns: 4
       }
     }
   ]

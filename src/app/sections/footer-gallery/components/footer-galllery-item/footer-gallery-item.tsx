@@ -25,7 +25,7 @@ export const FooterGalleryItem = ({ image }: FooterGalleryItemProps) => {
   const { hasSmoothScrollbar } = useScrollRig()
   const [isImageLoaded, setIsImageLoaded] = useState(false)
 
-  const sizes = getImageSizes(image.style.viewportPorcentage)
+  const sizes = getImageSizes(image.style.columns)
 
   return (
     <>

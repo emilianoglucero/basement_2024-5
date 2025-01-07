@@ -26,21 +26,14 @@ export const findClosestNextImageWidth = (width: number): NextImageWidth => {
 }
 
 export const getImageSizes = (
-  desktop: number,
-  tablet?: number,
-  mobile?: number
-) => {
-  let str = ''
+  desktopColumns: number,
+  tabletColumns: number = desktopColumns,
+  mobileColumns: number = desktopColumns,
+  totalColumns: number = 12
+): string => {
+  const desktopPercentage = (desktopColumns / totalColumns) * 100
+  const tabletPercentage = (tabletColumns / totalColumns) * 100
+  const mobilePercentage = (mobileColumns / totalColumns) * 100
 
-  if (mobile) {
-    str += `(max-width: 767px) ${mobile}vw, `
-  }
-  if (tablet) {
-    str += `(max-width: 1024px) ${tablet}vw, `
-  }
-  if (desktop) {
-    str += `${desktop}vw`
-  }
-
-  return str
+  return `(max-width: 768px) ${mobilePercentage}vw, (max-width: 1024px) ${tabletPercentage}vw, ${desktopPercentage}vw`
 }
