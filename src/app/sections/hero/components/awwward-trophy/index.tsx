@@ -2,19 +2,27 @@ import { styles, UseCanvas } from '@14islands/r3f-scroll-rig'
 import { ScrollScene } from '@14islands/r3f-scroll-rig'
 import { useScrollRig } from '@14islands/r3f-scroll-rig'
 import Image from 'next/image'
-import { Suspense, useRef } from 'react'
+import { Suspense, useEffect, useRef } from 'react'
 
 import { ASSETS } from '~/constants/assets'
 
 import AwwwardsTrophyModel from '../awwwward-trophy-model'
+import { useAppStore } from '~/context/use-app-store'
 
 export const AwwwardsTrophy = () => {
   const trackedElement = useRef<HTMLDivElement>(null!)
   const { hasSmoothScrollbar } = useScrollRig()
+  const { setTrophyRef } = useAppStore()
+
+  useEffect(() => {
+    if (trackedElement.current) {
+      setTrophyRef(trackedElement)
+    }
+  }, [trackedElement, setTrophyRef])
 
   return (
     <>
-      <div ref={trackedElement}>
+      <div ref={trackedElement} data-trophy>
         <Image
           alt={ASSETS.AWWWARDS.IMAGE.ALT}
           height={360}

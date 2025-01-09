@@ -5,9 +5,14 @@ import { create } from 'zustand'
 export interface AppStore {
   fontsLoaded: boolean
   setFontsLoaded: (fontsLoaded: boolean) => void
+  trophyRef: React.RefObject<HTMLDivElement>
+  setTrophyRef: (trophyRef: React.RefObject<HTMLDivElement>) => void
 }
 
 export const useAppStore = create<AppStore>((set) => ({
   fontsLoaded: false,
-  setFontsLoaded: (fontsLoaded: boolean) => set((s) => ({ ...s, fontsLoaded }))
+  setFontsLoaded: (fontsLoaded: boolean) => set((s) => ({ ...s, fontsLoaded })),
+  trophyRef: null,
+  setTrophyRef: (trophyRef: React.RefObject<HTMLDivElement>) =>
+    set((s) => ({ ...s, trophyRef }))
 }))
