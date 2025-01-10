@@ -1,126 +1,14 @@
 'use client'
 import '@14islands/r3f-scroll-rig/css'
 
-import {
-  GlobalCanvas,
-  SmoothScrollbar,
-  useTracker
-} from '@14islands/r3f-scroll-rig'
+import { GlobalCanvas, SmoothScrollbar } from '@14islands/r3f-scroll-rig'
 import { Suspense, useRef } from 'react'
+
+import { Pointer } from './physics/pointer'
+import AwwwardTrophyModel from './physics/awwward-trophy-model'
 import { useDeviceDetect } from '~/hooks/use-device-detect'
-import { useGLTF } from '@react-three/drei'
-import { BallCollider, Physics, RigidBody } from '@react-three/rapier'
-import * as THREE from 'three'
-import { useFrame } from '@react-three/fiber'
-import { useAppStore } from '~/context/use-app-store'
-import { GLTFResult } from '~/app/sections/falling-caps/webgl-model/types'
-import { ASSETS } from '~/constants/assets'
-function Pointer({ size = 0.5, vec = new THREE.Vector3() }) {
-  const ref = useRef(null!)
-  useFrame(({ pointer, viewport }) => {
-    ref.current?.setNextKinematicTranslation(
-      vec.set(
-        (pointer.x * viewport.width) / 2,
-        (pointer.y * viewport.height) / 2,
-        1
-      )
-    )
-  })
-  return (
-    <RigidBody type="kinematicPosition" colliders={false} ref={ref}>
-      <BallCollider args={[size]} />
-      <mesh visible={false}>
-        <sphereGeometry args={[size, 16, 64]} />
-        <meshBasicMaterial color="green" />
-      </mesh>
-    </RigidBody>
-  )
-}
 
-function TrackedBox() {
-  const { nodes, materials } = useGLTF(
-    ASSETS.AWWWARDS.MODEL_PATH
-  ) as unknown as GLTFResult
-  const vector3 = new THREE.Vector3()
-  const angle = new THREE.Vector3()
-  const rotation = new THREE.Vector3()
-  const targetPosition = new THREE.Vector3()
-
-  const ref = useRef(null!)
-  const { trophyRef } = useAppStore()
-  const tracker = useTracker(trophyRef, {
-    rootMargin: '50%',
-    threshold: 0,
-    autoUpdate: true
-  })
-
-  const initialPosition = [
-    tracker.position.x + tracker.scale.y, // the trophy appears from the outside
-    tracker.position.y,
-    tracker.position.z
-  ]
-
-  useFrame(() => {
-    if (ref.current && tracker.position) {
-      // get current position
-      const currentPosition = ref.current.translation()
-      vector3.set(currentPosition.x, currentPosition.y, currentPosition.z)
-
-      //set target position
-      targetPosition.set(
-        tracker.position.x - tracker.scale.y * 0.2, // whe are positioning the trophy near to the camera the place distance from the gallery images is so we need to subtract a little bit
-        tracker.position.y,
-        tracker.position.z + tracker.scale.z // place the trophy a little bit more near to the camera
-      )
-
-      //calculate the direction to target position
-      const direction = vector3.subVectors(targetPosition, vector3)
-      const distance = direction.length()
-
-      // apply force proportional to distance
-      const forceMagnitude = Math.min(distance * 150, 200) // force
-      ref.current.applyImpulse(
-        direction.normalize().multiplyScalar(forceMagnitude),
-        true
-      )
-
-      // stabilize the rotation
-      angle.copy(ref.current.angvel())
-      rotation.copy(ref.current.rotation())
-      ref.current.setAngvel({
-        x: angle.x - rotation.x * 5,
-        y: angle.y - rotation.y * 5,
-        z: angle.z - rotation.z * 5
-      })
-    }
-  })
-
-  if (!tracker.position || !materials || !nodes || tracker.scale.x === 0)
-    return null
-  return (
-    <RigidBody
-      position={initialPosition}
-      type="dynamic"
-      colliders="cuboid"
-      ref={ref}
-      linearDamping={6}
-      angularDamping={4}
-      enabledRotations={[true, true, true]}
-      scale={tracker.scale.x}
-    >
-      <group rotation-y={-0.15} dispose={null}>
-        <mesh
-          geometry={nodes.Cube001.geometry}
-          material={materials.m_Trophy3}
-        />
-        <mesh
-          geometry={nodes.Cube001_1.geometry}
-          material={materials.m_Outline}
-        />
-      </group>
-    </RigidBody>
-  )
-}
+import { Physics } from '@react-three/rapier'
 export function CanvasProvider({ children }: { children: React.ReactNode }) {
   const eventSource = useRef<HTMLDivElement>(null!)
   const isMobile = useDeviceDetect().isMobile
@@ -136,10 +24,9 @@ export function CanvasProvider({ children }: { children: React.ReactNode }) {
       >
         {(globalChildren) => (
           <Suspense>
-            <Physics gravity={[0, 2, 0]} colliders="cuboid" debug>
-              <ambientLight intensity={0.5} />
+            <Physics gravity={[0, 2, 0]} colliders="cuboid">
               <Pointer size={0.5} />
-              <TrackedBox size={2} />
+              <AwwwardTrophyModel />
               {globalChildren}
             </Physics>
           </Suspense>
