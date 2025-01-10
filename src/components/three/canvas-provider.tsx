@@ -22,7 +22,7 @@ function Pointer({ size = 0.5, vec = new THREE.Vector3() }) {
       vec.set(
         (pointer.x * viewport.width) / 2,
         (pointer.y * viewport.height) / 2,
-        0
+        1
       )
     )
   })
@@ -44,6 +44,7 @@ function TrackedBox() {
   const vector3 = new THREE.Vector3()
   const angle = new THREE.Vector3()
   const rotation = new THREE.Vector3()
+  const targetPosition = new THREE.Vector3()
 
   const ref = useRef(null!)
   const { trophyRef } = useAppStore()
@@ -54,7 +55,7 @@ function TrackedBox() {
   })
 
   const initialPosition = [
-    tracker.position.x + 4,
+    tracker.position.x + tracker.scale.y, // the trophy appears from the outside
     tracker.position.y,
     tracker.position.z
   ]
@@ -65,12 +66,19 @@ function TrackedBox() {
       const currentPosition = ref.current.translation()
       vector3.set(currentPosition.x, currentPosition.y, currentPosition.z)
 
+      //set target position
+      targetPosition.set(
+        tracker.position.x - tracker.scale.y * 0.2, // whe are positioning the trophy near to the camera the place distance from the gallery images is so we need to subtract a little bit
+        tracker.position.y,
+        tracker.position.z + tracker.scale.z // place the trophy a little bit more near to the camera
+      )
+
       //calculate the direction to target position
-      const direction = vector3.subVectors(tracker.position, vector3)
+      const direction = vector3.subVectors(targetPosition, vector3)
       const distance = direction.length()
 
       // apply force proportional to distance
-      const forceMagnitude = Math.min(distance * 10, 10) // force
+      const forceMagnitude = Math.min(distance * 150, 200) // force
       ref.current.applyImpulse(
         direction.normalize().multiplyScalar(forceMagnitude),
         true
@@ -97,8 +105,7 @@ function TrackedBox() {
       ref={ref}
       linearDamping={6}
       angularDamping={4}
-      restitution={0}
-      friction={1}
+      enabledRotations={[true, true, true]}
       scale={tracker.scale.x}
     >
       <group rotation-y={-0.15} dispose={null}>
@@ -129,7 +136,7 @@ export function CanvasProvider({ children }: { children: React.ReactNode }) {
       >
         {(globalChildren) => (
           <Suspense>
-            <Physics gravity={[0, 2, 0]} colliders="cuboid">
+            <Physics gravity={[0, 2, 0]} colliders="cuboid" debug>
               <ambientLight intensity={0.5} />
               <Pointer size={0.5} />
               <TrackedBox size={2} />
