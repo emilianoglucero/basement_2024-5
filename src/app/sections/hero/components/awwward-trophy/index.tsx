@@ -34,7 +34,7 @@ export const AwwwardsTrophy = () => {
       </div>
       {hasSmoothScrollbar && (
         <UseCanvas>
-          <ScrollScene track={trackedElement}>
+          {/* <ScrollScene track={trackedElement}>
             {(props) => (
               <Suspense fallback={null}>
                 <AwwwardsTrophyModel
@@ -43,7 +43,7 @@ export const AwwwardsTrophy = () => {
                 />
               </Suspense>
             )}
-          </ScrollScene>
+          </ScrollScene> */}
         </UseCanvas>
       )}
     </>
