@@ -87,9 +87,8 @@ function TrackedBox() {
     }
   })
 
-  if (!tracker.position || !materials || !nodes) return null
-  console.log('tracker.scale.x', tracker.scale.x)
-
+  if (!tracker.position || !materials || !nodes || tracker.scale.x === 0)
+    return null
   return (
     <RigidBody
       position={initialPosition}
@@ -100,7 +99,7 @@ function TrackedBox() {
       angularDamping={4}
       restitution={0}
       friction={1}
-      scale={3}
+      scale={tracker.scale.x}
     >
       <group rotation-y={-0.15} dispose={null}>
         <mesh
@@ -130,7 +129,7 @@ export function CanvasProvider({ children }: { children: React.ReactNode }) {
       >
         {(globalChildren) => (
           <Suspense>
-            <Physics gravity={[0, 2, 0]} colliders="cuboid" debug>
+            <Physics gravity={[0, 2, 0]} colliders="cuboid">
               <ambientLight intensity={0.5} />
               <Pointer size={0.5} />
               <TrackedBox size={2} />
