@@ -9,6 +9,7 @@ import { RigidBody } from '@react-three/rapier'
 import { GLTFResult } from '../types/gltf'
 
 const AwwwardTrophyModel = () => {
+  const lastScrollProgress = useRef(0)
   const { nodes, materials } = useGLTF(
     ASSETS.AWWWARDS.MODEL_PATH
   ) as unknown as GLTFResult
@@ -49,20 +50,40 @@ const AwwwardTrophyModel = () => {
       const distance = direction.length()
 
       // apply force proportional to distance
-      const forceMagnitude = Math.min(distance * 150, 200)
+      const forceMagnitude = Math.min(distance * 200, 300)
       ref.current.applyImpulse(
         direction.normalize().multiplyScalar(forceMagnitude),
         true
       )
 
-      // stabilize the rotation
-      angle.copy(ref.current.angvel())
-      rotation.copy(ref.current.rotation())
-      ref.current.setAngvel({
-        x: angle.x - rotation.x * 5,
-        y: angle.y - rotation.y * 5,
-        z: angle.z - rotation.z * 5
-      })
+      const scrollProgress = tracker.scrollState.progress
+
+      if (scrollProgress !== lastScrollProgress.current) {
+        // calculate initial rotation to face camera
+        const angleToCamera = Math.atan2(currentPosition.x, currentPosition.z)
+        // add scroll rotation to initial angle
+        const targetRotationY = angleToCamera - scrollProgress * Math.PI * 2
+
+        //get current rotation
+        const currentRotation = ref.current.rotation()
+
+        // calculate rotation difference and apply torque
+        const rotationDifference = targetRotationY - currentRotation.y
+        ref.current.applyTorqueImpulse(
+          new THREE.Vector3(0, rotationDifference * 20, 0),
+          true
+        )
+
+        // stabilize the rotation
+        angle.copy(ref.current.angvel())
+        rotation.copy(ref.current.rotation())
+        ref.current.setAngvel({
+          x: angle.x - rotation.x * 5,
+          y: angle.y - rotation.y * 5 + angleToCamera,
+          z: angle.z - rotation.z * 5
+        })
+        lastScrollProgress.current = scrollProgress
+      }
     }
   })
 
@@ -74,12 +95,12 @@ const AwwwardTrophyModel = () => {
       type="dynamic"
       colliders="cuboid"
       ref={ref}
-      linearDamping={6}
-      angularDamping={4}
+      linearDamping={40}
+      angularDamping={15}
       enabledRotations={[true, true, true]}
       scale={tracker.scale.x}
     >
-      <group rotation-y={-0.15} dispose={null}>
+      <group dispose={null}>
         <mesh
           geometry={nodes.Cube001.geometry}
           material={materials.m_Trophy3}
