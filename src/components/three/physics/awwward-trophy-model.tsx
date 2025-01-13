@@ -24,16 +24,19 @@ const AwwwardTrophyModel = () => {
   let distance = null
   const ref = useRef<any>(null!)
   const { trophyRef } = useAppStore()
-  const tracker = useTracker(trophyRef, {
-    rootMargin: '50%',
-    threshold: 0,
-    autoUpdate: true
-  })
+
+  const tracker = trophyRef
+    ? useTracker(trophyRef, {
+        rootMargin: '50%',
+        threshold: 0,
+        autoUpdate: true
+      })
+    : null
 
   const initialPosition = [
-    tracker.position.x + tracker.scale.y, // the trophy appears from the outside
-    tracker.position.y,
-    tracker.position.z + tracker.scale.z
+    (tracker?.position.x ?? 0) + (tracker?.scale.y ?? 0), // the trophy appears from the outside
+    tracker?.position.y ?? 0,
+    (tracker?.position.z ?? 0) + (tracker?.scale.z ?? 0)
   ]
 
   const { viewport } = useThree()
@@ -75,7 +78,7 @@ const AwwwardTrophyModel = () => {
   }
 
   useFrame(() => {
-    if (!ref.current || !tracker.position) {
+    if (!ref.current || !tracker?.position) {
       return
     }
 
@@ -148,7 +151,7 @@ const AwwwardTrophyModel = () => {
     }
   })
 
-  if (!tracker.position || !materials || !nodes || tracker.scale.x === 0) {
+  if (!tracker?.position || !materials || !nodes || tracker.scale.x === 0) {
     return null
   }
 
