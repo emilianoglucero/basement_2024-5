@@ -16,10 +16,10 @@ const AwwwardTrophyModel = () => {
   const { nodes, materials } = useGLTF(
     ASSETS.AWWWARDS.MODEL_PATH
   ) as unknown as GLTFResult
-  let vector3 = new THREE.Vector3()
-  let angle = new THREE.Vector3()
-  let rotation = new THREE.Vector3()
-  let targetPosition = new THREE.Vector3()
+  const vector3 = new THREE.Vector3()
+  const angle = new THREE.Vector3()
+  const rotation = new THREE.Vector3()
+  const targetPosition = new THREE.Vector3()
   let currentPosition = new THREE.Vector3()
   let distance = null
   const ref = useRef<any>(null!)
@@ -75,7 +75,9 @@ const AwwwardTrophyModel = () => {
   }
 
   useFrame(() => {
-    if (!ref.current || !tracker.position) return
+    if (!ref.current || !tracker.position) {
+      return
+    }
 
     const viewportFactor = calculateViewportFactor()
 
@@ -91,7 +93,7 @@ const AwwwardTrophyModel = () => {
     distance = vector3.length()
 
     switch (animationState) {
-      case 'intro':
+      case 'intro': {
         currentPosition = ref.current.translation()
         vector3.set(currentPosition.x, currentPosition.y, currentPosition.z)
 
@@ -112,8 +114,9 @@ const AwwwardTrophyModel = () => {
           setAnimationState('active')
         }
         break
+      }
 
-      case 'active':
+      case 'active': {
         currentPosition = ref.current.translation()
         vector3.set(currentPosition.x, currentPosition.y, currentPosition.z)
 
@@ -141,11 +144,14 @@ const AwwwardTrophyModel = () => {
         })
 
         break
+      }
     }
   })
 
-  if (!tracker.position || !materials || !nodes || tracker.scale.x === 0)
+  if (!tracker.position || !materials || !nodes || tracker.scale.x === 0) {
     return null
+  }
+
   return (
     <RigidBody
       position={initialPosition}

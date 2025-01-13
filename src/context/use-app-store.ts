@@ -5,7 +5,7 @@ import { create } from 'zustand'
 export interface AppStore {
   fontsLoaded: boolean
   setFontsLoaded: (fontsLoaded: boolean) => void
-  trophyRef: React.RefObject<HTMLDivElement>
+  trophyRef: React.RefObject<HTMLDivElement> | null
   setTrophyRef: (trophyRef: React.RefObject<HTMLDivElement>) => void
 }
 
