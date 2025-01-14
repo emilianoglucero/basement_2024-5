@@ -1,12 +1,13 @@
 import { useTracker } from '@14islands/r3f-scroll-rig'
 import { useGLTF } from '@react-three/drei'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ASSETS } from '~/constants/assets'
 import { useAppStore } from '~/context/use-app-store'
 import * as THREE from 'three'
-import { useFrame, useThree } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import { RigidBody } from '@react-three/rapier'
 import { GLTFResult } from '../types/gltf'
+import { calculateViewportFactor } from '~/lib/utils/viewport'
 
 const AwwwardTrophyModel = () => {
   const [animationState, setAnimationState] = useState<'intro' | 'active'>(
@@ -24,6 +25,18 @@ const AwwwardTrophyModel = () => {
   let distance = null
   const ref = useRef<any>(null!)
   const { trophyRef } = useAppStore()
+  const [viewportFactor, setViewportFactor] = useState(() =>
+    calculateViewportFactor()
+  )
+
+  useEffect(() => {
+    const handleResize = () => {
+      setViewportFactor(calculateViewportFactor())
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const tracker = trophyRef
     ? useTracker(trophyRef, {
@@ -39,50 +52,15 @@ const AwwwardTrophyModel = () => {
     (tracker?.position.z ?? 0) + (tracker?.scale.z ?? 0)
   ]
 
-  const { viewport } = useThree()
-
-  const calculateViewportFactor = () => {
-    // reference viewport sizes (in THREE units)
-    const MOBILE_AREA = 3 * 6 // approximate mobile viewport
-    const DESKTOP_AREA = 12 * 8 // approximate desktop viewport
-
-    // current viewport area using reactive viewport values
-    const currentArea = viewport.width * viewport.height
-
-    // simple linear interpolation between size ranges
-    let factor
-    if (currentArea <= MOBILE_AREA) {
-      // Mobile and smaller: 0.2 to 0.5
-      factor = THREE.MathUtils.mapLinear(currentArea, 0, MOBILE_AREA, 0.2, 0.5)
-    } else if (currentArea <= DESKTOP_AREA) {
-      // tablet to desktop: 0.5 to 1.5
-      factor = THREE.MathUtils.mapLinear(
-        currentArea,
-        MOBILE_AREA,
-        DESKTOP_AREA,
-        0.5,
-        1.5
-      )
-    } else {
-      // larger than desktop: 1.5 to 3.0
-      factor = THREE.MathUtils.mapLinear(
-        currentArea,
-        DESKTOP_AREA,
-        DESKTOP_AREA * 2,
-        1.5,
-        3.0
-      )
-    }
-
-    return factor
-  }
+  const INTRO_BASE_FORCE_MULTIPLIER = 30
+  const INTRO_MAX_FORCE = 50
+  const ACTIVE_BASE_FORCE_MULTIPLIER = 150
+  const ACTIVE_MAX_FORCE = 200
 
   useFrame(() => {
     if (!ref.current || !tracker?.position) {
       return
     }
-
-    const viewportFactor = calculateViewportFactor()
 
     // set target position
     targetPosition.set(
@@ -105,8 +83,8 @@ const AwwwardTrophyModel = () => {
         distance = vector3.length()
 
         const introForceMagnitude = Math.min(
-          distance * 30 * viewportFactor,
-          50 * viewportFactor
+          distance * INTRO_BASE_FORCE_MULTIPLIER * viewportFactor,
+          INTRO_MAX_FORCE * viewportFactor
         )
         ref.current.applyImpulse(
           vector3.normalize().multiplyScalar(introForceMagnitude),
@@ -128,8 +106,8 @@ const AwwwardTrophyModel = () => {
         distance = vector3.length()
 
         const forceMagnitude = Math.min(
-          distance * 150 * viewportFactor,
-          200 * viewportFactor
+          distance * ACTIVE_BASE_FORCE_MULTIPLIER * viewportFactor,
+          ACTIVE_MAX_FORCE * viewportFactor
         )
         ref.current.applyImpulse(
           vector3.normalize().multiplyScalar(forceMagnitude),
