@@ -1,58 +1,54 @@
 # Trophy Model Rotation Implementation
 
-The model rotation during the scroll logic is implemented in the `src/app/sections/hero/components/awwwward-trophy-model/index.tsx` file.
+## Overview
 
-## Key Implementation Details
+The trophy model rotation during scroll is implemented using GSAP's ScrollTrigger plugin, it provides a smoother animation and more precise control over the rotation based on scroll position.
 
-Is implemented in the `AwwwardsTrophyModel` component, using the `useFrame` hook to continuously update the model rotation based on the scroll position.
+## Implementation Details
 
-### Model Rotation
+### Core Setup
 
-The model rotation is implemented calculating the target rotation based on the scroll position and then interpolating between the current rotation and the target rotation.
+The rotation logic is implemented in the AwwwardsTrophyModel component `src/app/sections/hero/components/awwwward-trophy-model/index.tsx` using GSAP ScrollTrigger:
 
 ```tsx
-useFrame(() => {
-  if (meshRef.current) {
-    // interpolate smoothly between current rotation and target rotation
-    const targetRotation = initialRotation + scrollY * Math.PI * 10
-    meshRef.current.rotation.y = THREE.MathUtils.lerp(
-      meshRef.current.rotation.y,
-      targetRotation,
-      0.1
-    )
-  }
+// trophy scroll rotation
+const scrollRotation = gsap.to(meshRef.current.rotation, {
+  y: initialRotation + Math.PI * 3,
+  scrollTrigger: {
+    trigger: 'body', // Trigger spans entire document length
+    start: 'top top', // Start at the top of the document
+    end: 'bottom bottom', // End at the bottom of the document
+    scrub: 0.5, // Scrubbing with 0.5 delay
+    immediateRender: false // Prevent initial rotation jump
 })
 ```
 
-### How it Works
+### Key Components
 
-1. **Target Rotation Calculation**
+1. **Initial State**
 
-   - `targetRotation = initialRotation + scrollY * Math.PI * 10`
-   - `initialRotation` is the initial rotation of the model
-   - `scrollY` is the normalized scroll position (0 to 1)
-   - `Math.PI * 10` is the rotation speed
-   - Results in approximately 5 full rotations during scroll
+   - Model starts with an intitial timeline animation for intro
+   - initialRotation value: -0.15 radians to slightly adjust the model for better visualisation
 
-2. **Linear Interpolation (Lerp)**
+2. **Scroll Behavior**
 
-   - `THREE.MathUtils.lerp(a, b, t)` calculates a value between `a` and `b` based on factor `t`
-   - Formula: `a + (b - a) * t`
-   - Where:
-     - `a`: Current rotation (`meshRef.current.rotation.y`)
-     - `b`: Target rotation (`targetRotation`)
-     - `t`: Interpolation factor (`0.1`)
+   - Three radians of rotation plus initialRotation for target rotation which sets the speed. Rotation is distributed over the entire document length, this means the actual rotation speed depends on the document length
+   - Scrubbing with 0.5 delay
+   - ImmediateRender: false to prevent initial render and conflicts with the timeline
 
-3. **Interpolation Factor (0.1)**
+3. **Cleanup**
+   - Proper ScrollTrigger cleanup on component unmount
+   - Prevents memory leaks and animation conflicts
 
-   - Small value (0.1) creates smooth movement
-   - Each frame moves 10% of the remaining distance
-   - Results in exponential deceleration
-   - Higher values = faster rotation, less smoothing
-   - Lower values = slower rotation, more smoothing
+### Technical Debt and Improvements
 
-4. **Continuous Update**
-   - Executed every frame via `useFrame`
-   - Creates smooth transition between rotations
-   - Never fully reaches target (asymptotic)
-   - Maintains fluid motion during scroll
+- Consider setting a more limited section of the document to trigger the scroll rotation, this will reduce the CPU usage and can have a more precise control over the rotation.
+
+### Improvements Over Previous Version
+
+The GSAP ScrollTrigger implementation offers several advantages over the previous useFrame approach:
+
+- Simplified codebase
+- Smoother and more precise rotation transitions
+- Reduced CPU usage compared to continuous frame updates and calculations
+- Built-in cleanup and memory management

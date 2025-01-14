@@ -88,7 +88,7 @@ const AwwwardsTrophyModel = ({ scale, model }: TrophyModelProps) => {
 
     // trophy scroll rotation
     const scrollRotation = gsap.to(meshRef.current.rotation, {
-      y: initialRotation + Math.PI * 3, // Two full rotations
+      y: initialRotation + Math.PI * 3,
       scrollTrigger: {
         trigger: 'body',
         start: 'top top',
