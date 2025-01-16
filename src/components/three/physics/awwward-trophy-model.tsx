@@ -135,10 +135,10 @@ const AwwwardTrophyModel = () => {
 
   return (
     <RigidBody
+      ref={ref}
       position={initialPosition}
       type="dynamic"
       colliders="cuboid"
-      ref={ref}
       linearDamping={animationState === 'active' ? 40 : 20}
       angularDamping={15}
       enabledRotations={[true, true, true]}

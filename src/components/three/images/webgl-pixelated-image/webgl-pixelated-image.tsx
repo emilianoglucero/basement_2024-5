@@ -8,7 +8,7 @@ import * as THREE from 'three'
 import { useIsomorphicLayoutEffect } from '~/hooks/use-isomorphic-layout-effect'
 import { basementOrange } from '~/lib/constants'
 import { gsap } from '~/lib/gsap'
-import { pixelatedlEffect, PIXELS } from '~/lib/shaders/effects/pixelated'
+import { pixelatedEffect, PIXELS } from '~/lib/shaders/effects/pixelated'
 gsap.registerPlugin(ScrollTrigger)
 
 interface WebGLPixelatedImageProps {
@@ -47,8 +47,8 @@ const CustomImageMaterial = shaderMaterial(
     uMouse: new THREE.Vector2(),
     uPrevMouse: new THREE.Vector2()
   },
-  pixelatedlEffect.vertex,
-  pixelatedlEffect.fragment
+  pixelatedEffect.vertex,
+  pixelatedEffect.fragment
 )
 
 extend({ CustomImageMaterial })
@@ -198,9 +198,16 @@ export const WebGLPixelatedImage = ({
     <mesh
       ref={setMeshRef}
       scale={scale}
-      onPointerEnter={() => {
+      onPointerEnter={(event) => {
         if (meshRef?.material?.enableHoverEffects) {
           setIsHovered(true)
+          const x = event.uv?.x ?? 0.5
+          const y = event.uv?.y ?? 0.5
+          setMousePosition({ x, y })
+          setTargetPosition({ x, y })
+          setPrevMousePosition({ x, y })
+          meshRef.material.uMouse.set(x, y)
+          meshRef.material.uPrevMouse.set(x, y)
         }
       }}
       onPointerLeave={() => {

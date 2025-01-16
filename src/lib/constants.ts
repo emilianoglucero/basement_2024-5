@@ -4,18 +4,20 @@ export const isProd = process.env.NODE_ENV === 'production'
 export const isClient = typeof document !== 'undefined'
 export const isServer = !isClient
 
-if (typeof process.env.NEXT_PUBLIC_SITE_URL !== 'string') {
-  throw new Error(
-    `Please set the NEXT_PUBLIC_SITE_URL environment variable to your site's URL.
-    
-1. Create .env file at the root of your project.
-2. Add NEXT_PUBLIC_SITE_URL=http://localhost:3000
-3. For other environments (like production), make sure you set the correct URL.
-    `
-  )
+const resolveSiteUrl = () => {
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL
+  }
+  if (process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`
+  }
+  if (process.env.NEXT_PUBLIC_VERCEL_URL) {
+    return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  }
+  return 'http://localhost:3000'
 }
 
-export const siteURL = new URL(process.env.NEXT_PUBLIC_SITE_URL)
+export const siteURL = new URL(resolveSiteUrl())
 export const siteOrigin = siteURL.origin
 
 // we like putting this in the JavaScript console,

@@ -4,7 +4,7 @@ import { basementOrange } from '~/lib/constants'
 
 import { fragment } from './fragment'
 import { vertex } from './vertex'
-export const pixelatedlEffect = {
+export const pixelatedEffect = {
   uTime: 0,
   uFillColor: new THREE.Color(basementOrange),
   uProgress: 0,

@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 @import './helpers';
 @import './reset.css';
 
@@ -30,7 +32,7 @@ html {
 body {
   background-color: black;
   font-family: var(--font-body);
-  transition: opacity #{$duration / 3 + 's'} ease-in;
+  transition: opacity #{math.div($duration, 3) + 's'} ease-in;
   overflow-x: hidden;
 }
 
