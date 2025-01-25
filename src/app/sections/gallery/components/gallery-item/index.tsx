@@ -56,8 +56,8 @@ export const GalleryItem = ({ image }: GalleryItemProps) => {
                   animation={{
                     duration: 2,
                     delay: 0.1,
-                    hoverIntensity: 1.5,
-                    hoverEaseFactor: 0.15,
+                    // hoverIntensity: 1.5, // wtf takes no effect DELETE
+                    // hoverEaseFactor: 0.15, // wtf takes no effect DELETE
                     mouseEaseFactor: 0.05
                   }}
                 />

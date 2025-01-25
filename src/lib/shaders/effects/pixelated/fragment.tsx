@@ -243,15 +243,18 @@ export const fragment = `
 
         // post transition effect
        if (postEffectProgress > 0.0) {
-            vec2 gridUV = floor(vUv * vec2(40.0, 40.0)) / vec2(40.0, 40.0);
-            vec2 centerOfPixel = gridUV + vec2(1.0/40.0, 1.0/40.0);
+            // sets the grid size, each cell is x by y
+            vec2 gridUV = floor(vUv * vec2(80.0, 80.0)) / vec2(80.0, 80.0);
+            // sets the center of the cell
+            vec2 centerOfPixel = gridUV + vec2(1.0/80.0, 1.0/80.0);
 
             vec2 mouseDirection = uMouse - uPrevMouse;
             vec2 pixelToMouseDirection = centerOfPixel - uMouse;
             float pixelDistanceToMouse = length(pixelToMouseDirection);
-            float strength = smoothstep(0.3, 0.0, pixelDistanceToMouse);
+            // set the radius of the effect
+            float strength = smoothstep(0.09, 0.2, pixelDistanceToMouse);
 
-            vec2 uvOffset = strength * -mouseDirection * 0.4;
+            vec2 uvOffset = strength * -mouseDirection * 10.4;
             vec2 distortedUV = vUv - uvOffset;
 
             vec4 distortedColor = texture2D(uTexture, distortedUV);

@@ -59,8 +59,9 @@ export const FooterGalleryItem = ({ image }: FooterGalleryItemProps) => {
                     animation={{
                       duration: 3,
                       delay: 0.2,
-                      hoverIntensity: 1.5,
-                      hoverEaseFactor: 0.15,
+                      // hoverIntensity: 0,
+                      // hoverIntensity: 1.5,
+                      // hoverEaseFactor: 0.15,
                       mouseEaseFactor: 0.05,
                       scroll: {
                         trigger: trigger,

@@ -8,7 +8,7 @@ import * as THREE from 'three'
 import { useIsomorphicLayoutEffect } from '~/hooks/use-isomorphic-layout-effect'
 import { basementOrange } from '~/lib/constants'
 import { gsap } from '~/lib/gsap'
-import { pixelatedlEffect, PIXELS } from '~/lib/shaders/effects/pixelated'
+import { pixelatedEffect, PIXELS } from '~/lib/shaders/effects/pixelated'
 gsap.registerPlugin(ScrollTrigger)
 
 interface WebGLPixelatedImageProps {
@@ -20,8 +20,8 @@ interface WebGLPixelatedImageProps {
     duration?: number
     delay?: number
     ease?: string
-    hoverIntensity?: number
-    hoverEaseFactor?: number
+    // hoverIntensity?: number
+    // hoverEaseFactor?: number
     mouseEaseFactor?: number
     scroll?: {
       trigger?: string | Element
@@ -47,8 +47,8 @@ const CustomImageMaterial = shaderMaterial(
     uMouse: new THREE.Vector2(),
     uPrevMouse: new THREE.Vector2()
   },
-  pixelatedlEffect.vertex,
-  pixelatedlEffect.fragment
+  pixelatedEffect.vertex,
+  pixelatedEffect.fragment
 )
 
 extend({ CustomImageMaterial })
@@ -81,8 +81,8 @@ export const WebGLPixelatedImage = ({
     duration: 1.2,
     delay: 0.1,
     ease: 'power2.out',
-    hoverIntensity: 1.2,
-    hoverEaseFactor: 0.1,
+    // hoverIntensity: 1.2,
+    // hoverEaseFactor: 0.1,
     mouseEaseFactor: 0.03,
     scroll: {
       trigger: undefined,
@@ -94,19 +94,24 @@ export const WebGLPixelatedImage = ({
 }: WebGLPixelatedImageProps) => {
   const [meshRef, setMeshRef] = useState<any>(null)
   const texture = useImageAsTexture(imgRef)
-  const [isHovered, setIsHovered] = useState(false)
+  // const [isHovered, setIsHovered] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 })
   const [targetPosition, setTargetPosition] = useState({ x: 0.5, y: 0.5 })
   const [prevMousePosition, setPrevMousePosition] = useState({ x: 0.5, y: 0.5 })
   const animationPlayedRef = useRef(false)
   const timelineRef = useRef<gsap.core.Timeline | null>(null)
+  const [mouseEaseFactor, setMouseEaseFactor] = useState(
+    animation.mouseEaseFactor
+  )
 
   const handlePointerMove = (event: any) => {
-    if (!isHovered) return
+    if (!meshRef?.material?.enableHoverEffects) return
+    // if (!isHovered) return
     const x = event.uv!.x
     const y = event.uv!.y
     setPrevMousePosition({ ...targetPosition })
     setTargetPosition({ x, y })
+    setMouseEaseFactor(animation.mouseEaseFactor)
   }
 
   // kill previous timeline
@@ -178,20 +183,21 @@ export const WebGLPixelatedImage = ({
     if (!meshRef?.material) return
 
     setMousePosition((prev) => ({
-      x: prev.x + (targetPosition.x - prev.x) * animation.mouseEaseFactor!,
-      y: prev.y + (targetPosition.y - prev.y) * animation.mouseEaseFactor!
+      x: prev.x + (targetPosition.x - prev.x) * mouseEaseFactor!,
+      y: prev.y + (targetPosition.y - prev.y) * mouseEaseFactor!
     }))
 
     meshRef.material.uMouse.set(mousePosition.x, mousePosition.y)
     meshRef.material.uPrevMouse.set(prevMousePosition.x, prevMousePosition.y)
 
-    if (meshRef.material.enableHoverEffects) {
-      meshRef.material.uProgress = THREE.MathUtils.lerp(
-        meshRef.material.uProgress,
-        isHovered ? animation.hoverIntensity! : 1.0,
-        animation.hoverEaseFactor!
-      )
-    }
+    // if (meshRef.material.enableHoverEffects) {
+    //   meshRef.material.uProgress = THREE.MathUtils.lerp(
+    //     meshRef.material.uProgress,
+    //     // isHovered ? animation.hoverIntensity! : 1.0,
+    //     1,
+    //     1
+    //   )
+    // }
   })
 
   return (
@@ -199,15 +205,17 @@ export const WebGLPixelatedImage = ({
       ref={setMeshRef}
       scale={scale}
       onPointerEnter={() => {
-        if (meshRef?.material?.enableHoverEffects) {
-          setIsHovered(true)
-        }
+        // if (meshRef?.material?.enableHoverEffects) {
+        //   setIsHovered(true)
+        // }
+        setMouseEaseFactor(0.08)
+        document.body.style.cursor = 'crosshair'
       }}
       onPointerLeave={() => {
-        if (meshRef?.material?.enableHoverEffects) {
-          setIsHovered(false)
-          setTargetPosition({ ...prevMousePosition })
-        }
+        // setIsHovered(false)
+        setTargetPosition({ ...prevMousePosition })
+        setMouseEaseFactor(0.025)
+        document.body.style.cursor = 'auto'
       }}
       onPointerMove={handlePointerMove}
     >
