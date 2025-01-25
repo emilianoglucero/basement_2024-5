@@ -12,11 +12,14 @@ export interface GLTFResult extends GLTF {
   }
 }
 
+export interface Scale {
+  scale: [number, number, number]
+}
+
 export interface WebGLModelProps {
   model: string
-  scale: THREE.Vector3 | [number, number, number]
-  inViewport: boolean
-  style: React.CSSProperties
+  scale: Scale
+  style?: React.CSSProperties
   index: number
   totalCaps: number
 }

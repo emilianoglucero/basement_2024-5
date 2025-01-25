@@ -1,125 +1,176 @@
 import { CSSProperties } from 'react'
 
-export interface CapStyle {
-  dom: CSSProperties & {
-    transform: string
+export interface CapConfiguration {
+  positioning: {
     top?: string
     bottom?: string
     left?: string
     right?: string
   }
-  webgl: CSSProperties & {
+  displayStyle: {
     transform: string
-    top?: string
-    bottom?: string
-    left?: string
-    right?: string
+    display: string
+    flexDirection: CSSProperties['flexDirection']
+    justifyContent: string
+  }
+  webglProperties?: {
+    verticalAlignment?: 'top' | 'bottom'
+    verticalOffset?: number
+    size?: number
+    rotation?: number
   }
 }
 
-export const CAPS_DATA: CapStyle[] = [
+export const CAPS_DATA: CapConfiguration[] = [
   {
-    dom: {
-      position: 'absolute',
-      transform: 'translate(0, 0) scale(0.85) rotate(-25deg)',
-      top: '7%',
+    positioning: {
+      top: '0%',
       left: '3%'
     },
-    webgl: {
-      transform: 'translate(0, 0) scale(0.85) rotate(-12deg)',
-      top: '7%',
-      left: '3%'
+    displayStyle: {
+      transform: 'translate(0, 0) scale(0.85) rotate(-15)',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'start'
+    },
+    webglProperties: {
+      verticalAlignment: 'top',
+      verticalOffset: 0.5,
+      size: 0.85,
+      rotation: 0.3
     }
   },
   {
-    dom: {
-      position: 'absolute',
-      transform: 'translate(0, 0) scale(0.75) rotate(-22deg)',
-      top: '18%',
-      right: '12%'
+    positioning: {
+      // transform: 'translate(0, 0) scale(0.75) rotate(-22deg)',
+      top: '0%',
+      left: '22%'
     },
-    webgl: {
-      transform: 'translate(0, 0) scale(0.75) rotate(-12deg)',
-      top: '18%',
-      right: '20%'
+    displayStyle: {
+      transform: 'scale(0.85) rotate(10)',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'start'
+    },
+    webglProperties: {
+      verticalAlignment: 'top',
+      verticalOffset: 0.63,
+      size: 0.73,
+      rotation: -0.1
     }
   },
   {
-    dom: {
-      position: 'absolute',
-      transform: 'translate(0, 0) scale(0.55) rotate(-28deg)',
-      bottom: '18%',
-      right: '35%'
+    positioning: {
+      // transform: 'translate(0, 0) scale(0.55) rotate(-28deg)',
+      bottom: '0%',
+      left: '46%'
     },
-    webgl: {
-      transform: 'translate(0, 0) scale(0.55) rotate(-14deg)',
-      bottom: '18%',
-      right: '35%'
+    displayStyle: {
+      transform: 'scale(0.85) rotate(-10)',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'start'
+    },
+    webglProperties: {
+      verticalAlignment: 'top',
+      verticalOffset: 0.52,
+      size: 0.75,
+      rotation: 0.35
     }
   },
   {
-    dom: {
-      position: 'absolute',
-      transform: 'translate(0, 0) scale(0.65) rotate(22deg)',
-      top: '2%',
-      right: '2%'
+    positioning: {
+      // transform: 'translate(0, 0) scale(0.65) rotate(22deg)',
+      top: '0%',
+      left: '70%'
     },
-    webgl: {
-      transform: 'translate(0, 0) scale(0.65) rotate(10deg)',
-      top: '2%',
-      right: '2%'
+    displayStyle: {
+      transform: 'scale(0.85) rotate(10)',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'start'
+    },
+    webglProperties: {
+      verticalAlignment: 'top',
+      verticalOffset: 0.61,
+      size: 0.86,
+      rotation: -0.04
     }
   },
   {
-    dom: {
-      position: 'absolute',
-      transform: 'translate(0, 0) rotate(22deg)',
-      top: '10%',
-      left: '35%'
+    positioning: {
+      // transform: 'translate(0, 0) scale(0.85) rotate(-25deg)',
+      top: '0%',
+      left: '2%'
     },
-    webgl: {
-      transform: 'translate(0, 0) rotate(8deg)',
-      top: '10%',
-      left: '35%'
+    displayStyle: {
+      transform: 'scale(0.85) rotate(10)',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'end'
+    },
+    webglProperties: {
+      verticalAlignment: 'bottom',
+      verticalOffset: 0.61,
+      size: 0.86,
+      rotation: -0.04
     }
   },
   {
-    dom: {
-      position: 'absolute',
-      transform: 'translate(0, 0) scale(0.7) rotate(27deg)',
-      bottom: '7%',
-      left: '1%'
+    positioning: {
+      // transform: 'translate(0, 0) scale(0.75) rotate(-22deg)',
+      top: '0%',
+      left: '29%'
     },
-    webgl: {
-      transform: 'translate(0, 0) scale(0.7) rotate(11deg)',
-      bottom: '7%',
-      left: '1%'
+    displayStyle: {
+      transform: 'scale(0.85) rotate(10)',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'end'
+    },
+    webglProperties: {
+      verticalAlignment: 'bottom',
+      verticalOffset: 0.61,
+      size: 0.86,
+      rotation: -0.04
     }
   },
   {
-    dom: {
-      position: 'absolute',
-      transform: 'translate(0, 0) scale(0.72) rotate(22deg)',
-      bottom: '1%',
-      left: '18%'
+    positioning: {
+      // transform: 'translate(0, 0) scale(0.55) rotate(-28deg)',
+      bottom: '0%',
+      left: '54%'
     },
-    webgl: {
-      transform: 'translate(0, 0) scale(0.72) rotate(-14deg)',
-      bottom: '1%',
-      left: '28%'
+    displayStyle: {
+      transform: 'scale(0.85) rotate(10)',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'end'
+    },
+    webglProperties: {
+      verticalAlignment: 'bottom',
+      verticalOffset: 0.61,
+      size: 0.66,
+      rotation: 0.2
     }
   },
   {
-    dom: {
-      position: 'absolute',
-      transform: 'translate(0, 0) scale(0.85) rotate(-8deg)',
-      bottom: '1%',
-      right: '1%'
+    positioning: {
+      // transform: 'translate(0, 0) scale(0.65) rotate(22deg)',
+      top: '0%',
+      left: '75%'
     },
-    webgl: {
-      transform: 'translate(0, 0) scale(0.85) rotate(-12deg)',
-      bottom: '4%',
-      right: '1%'
+    displayStyle: {
+      transform: 'scale(0.85) rotate(10)',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'end'
+    },
+    webglProperties: {
+      verticalAlignment: 'bottom',
+      verticalOffset: 0.61,
+      size: 0.86,
+      rotation: -0.24
     }
   }
 ]

@@ -2,10 +2,11 @@
 
 .section {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+  // top: 0%;
+  // left: -40%;
+  // width: 100%;
   pointer-events: none;
+  width: tovw(320px, 220px, 'desktop');
 
   .stickyContainer {
     @include respond-to('tablet') {

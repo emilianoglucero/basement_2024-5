@@ -73,8 +73,9 @@ export const FallingCaps = () => {
           model={ASSETS.CAP.MODEL}
           index={randomIndices[i] ?? i}
           totalCaps={CAPS_DATA.length}
-          webglStyle={cap.webgl}
-          domStyle={cap.dom}
+          webglProperties={cap.webglProperties}
+          domPositionStyle={cap.positioning}
+          domDisplayStyle={cap.displayStyle}
         />
       ))}
     </Container>

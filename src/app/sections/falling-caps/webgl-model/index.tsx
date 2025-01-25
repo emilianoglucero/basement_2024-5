@@ -1,6 +1,7 @@
 import { Float, useGLTF } from '@react-three/drei'
 import { ScrollTrigger } from 'gsap/all'
-import { useEffect, useMemo, useRef, useState } from 'react'
+// import { useEffect, useMemo, useState } from 'react'
+import { useRef } from 'react'
 import * as THREE from 'three'
 
 import { useIsomorphicLayoutEffect } from '~/hooks/use-isomorphic-layout-effect'
@@ -8,13 +9,22 @@ import { gsap } from '~/lib/gsap'
 
 import { calculateAnimationTimings } from './animation'
 import { GLTFResult, WebGLModelProps } from './types'
-import {
-  calculateBaseScale,
-  calculateFinalScale,
-  convertCSSToWebGLPosition,
-  extractTransformValues} from './utils'
+// import {
+//   calculateBaseScale,
+//   calculateFinalScale,
+//   convertCSSToWebGLPosition,
+//   extractTransformValues
+// } from './utils'
 
 gsap.registerPlugin(ScrollTrigger)
+
+// Define a new type that extends CSSProperties
+interface ExtendedCSSProperties extends React.CSSProperties {
+  verticalAlignment?: 'top' | 'bottom'
+  rotation?: number
+  size?: number
+  verticalOffset?: number
+}
 
 const WebGLModel = ({
   model,
@@ -22,43 +32,130 @@ const WebGLModel = ({
   style,
   index,
   totalCaps
-}: WebGLModelProps) => {
+}: WebGLModelProps & { style: ExtendedCSSProperties }) => {
+  const positionY =
+    style?.verticalAlignment === 'top' ? scale.scale[0] : -scale.scale[0]
+  const rotationY = style?.rotation
+  const finalScale = scale.scale[0] * (style.size || 1)
+
   const meshRef = useRef<THREE.Group>(null!)
   const { nodes, materials } = useGLTF(model) as unknown as GLTFResult
-  const [viewport, setViewport] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight
-  })
 
-  useEffect(() => {
-    const handleResize = () => {
-      setViewport({
-        width: window.innerWidth,
-        height: window.innerHeight
-      })
-    }
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  // const [viewport, setViewport] = useState({
+  //   width: window.innerWidth,
+  //   height: window.innerHeight
+  // })
 
-  const transformValues = useMemo(() => {
-    return style?.transform
-      ? extractTransformValues(style.transform)
-      : { scale: 1, rotation: 0 }
-  }, [style?.transform])
+  // // useEffect(() => {
+  // //   const handleResize = () => {
+  // //     setViewport({
+  // //       width: window.innerWidth,
+  // //       height: window.innerHeight
+  // //     })
+  // //   }
+  // //   window.addEventListener('resize', handleResize)
+  // //   return () => window.removeEventListener('resize', handleResize)
+  // // }, [])
 
-  const baseScale = useMemo(() => calculateBaseScale(scale), [scale])
+  // // const transformValues = useMemo(() => {
+  // //   return style?.transform
+  // //     ? extractTransformValues(style.transform)
+  // //     : { scale: 1, rotation: 0 }
+  // // }, [style?.transform])
 
-  const finalScale = useMemo(
-    () => calculateFinalScale(viewport, baseScale, transformValues),
-    [viewport, baseScale, transformValues]
-  )
+  // // const baseScale = useMemo(() => calculateBaseScale(scale), [scale])
 
-  const position = useMemo(() => convertCSSToWebGLPosition(style), [style])
+  // // const finalScale = useMemo(
+  // //   () => calculateFinalScale(viewport, baseScale, transformValues),
+  // //   [viewport, baseScale, transformValues]
+  // // )
+
+  // // const position = useMemo(() => convertCSSToWebGLPosition(style), [style])
+
+  // useIsomorphicLayoutEffect(() => {
+  //   if (!meshRef.current) return
+  //   const trigger = document.getElementById('caps-section')
+
+  //   const { startPosition, endPosition } = calculateAnimationTimings(
+  //     index,
+  //     totalCaps
+  //   )
+
+  //   const timeline = gsap.timeline({
+  //     scrollTrigger: {
+  //       trigger: trigger,
+  //       start: `top+=${startPosition * 100}% center`,
+  //       end: `top+=${endPosition * 100}% center`,
+  //       scrub: 1
+  //     }
+  //   })
+
+  //   // const initialState = {
+  //   //   position: [position[0], position[1] - 2, position[2]] as [
+  //   //     number,
+  //   //     number,
+  //   //     number
+  //   //   ],
+  //   //   scale: [0, 0, 0] as [number, number, number],
+  //   //   rotation: [-0.2, -0.4, -0.2] as [number, number, number]
+  //   // }
+
+  //   // const finalState = {
+  //   //   position: position,
+  //   //   scale: finalScale.map((s) => s * 0.45),
+  //   //   rotation: [0.2, transformValues.rotation, 0]
+  //   // }
+
+  //   meshRef.current.position.set(0,0,0)
+  //   meshRef.current.scale.set(0,0,0)
+  //   meshRef.current.rotation.set(0,0,0)
+
+  //   // meshRef.current.position.set(...initialState.position)
+  //   // meshRef.current.scale.set(...initialState.scale)
+  //   // meshRef.current.rotation.set(...initialState.rotation)
+
+  //   timeline
+  //     .to(meshRef.current.position, {
+  //       x: finalState.position[0],
+  //       y: finalState.position[1],
+  //       z: finalState.position[2],
+  //       duration: 1,
+  //       ease: 'power2.out'
+  //     })
+  //     .to(
+  //       meshRef.current.rotation,
+  //       {
+  //         x: finalState.rotation[0],
+  //         y: finalState.rotation[1],
+  //         z: finalState.rotation[2],
+  //         duration: 1,
+  //         ease: 'power2.out'
+  //       },
+  //       0
+  //     )
+  //     .to(
+  //       meshRef.current.scale,
+  //       {
+  //         x: finalState.scale[0],
+  //         y: finalState.scale[1],
+  //         z: finalState.scale[2],
+  //         duration: 1,
+  //         ease: 'power2.out'
+  //       },
+  //       0
+  //     )
+
+  //   return () => {
+  //     timeline.scrollTrigger?.kill()
+  //   }
+  // }, [finalScale, index, totalCaps, position, transformValues.rotation])
 
   useIsomorphicLayoutEffect(() => {
     if (!meshRef.current) return
     const trigger = document.getElementById('caps-section')
+    meshRef.current.position.set(0, 0, 0)
+    meshRef.current.scale.set(0, 0, 0)
+    meshRef.current.rotation.set(0, 0, 0)
 
     const { startPosition, endPosition } = calculateAnimationTimings(
       index,
@@ -66,6 +163,7 @@ const WebGLModel = ({
     )
 
     const timeline = gsap.timeline({
+      ease: 'power2.out',
       scrollTrigger: {
         trigger: trigger,
         start: `top+=${startPosition * 100}% center`,
@@ -74,53 +172,30 @@ const WebGLModel = ({
       }
     })
 
-    const initialState = {
-      position: [position[0], position[1] - 2, position[2]] as [
-        number,
-        number,
-        number
-      ],
-      scale: [0, 0, 0] as [number, number, number],
-      rotation: [-0.2, -0.4, -0.2] as [number, number, number]
-    }
-
-    const finalState = {
-      position: position,
-      scale: finalScale.map((s) => s * 0.45),
-      rotation: [0.2, transformValues.rotation, 0]
-    }
-
-    meshRef.current.position.set(...initialState.position)
-    meshRef.current.scale.set(...initialState.scale)
-    meshRef.current.rotation.set(...initialState.rotation)
-
     timeline
       .to(meshRef.current.position, {
-        x: finalState.position[0],
-        y: finalState.position[1],
-        z: finalState.position[2],
-        duration: 1,
-        ease: 'power2.out'
+        x: 0,
+        y: positionY * (style.verticalOffset || 1),
+        z: 0,
+        duration: 1.2
       })
       .to(
         meshRef.current.rotation,
         {
-          x: finalState.rotation[0],
-          y: finalState.rotation[1],
-          z: finalState.rotation[2],
-          duration: 1,
-          ease: 'power2.out'
+          x: 0.2,
+          y: rotationY,
+          z: 0,
+          duration: 1.2
         },
         0
       )
       .to(
         meshRef.current.scale,
         {
-          x: finalState.scale[0],
-          y: finalState.scale[1],
-          z: finalState.scale[2],
-          duration: 1,
-          ease: 'power2.out'
+          x: finalScale,
+          y: finalScale,
+          z: finalScale,
+          duration: 1.2
         },
         0
       )
@@ -128,20 +203,20 @@ const WebGLModel = ({
     return () => {
       timeline.scrollTrigger?.kill()
     }
-  }, [finalScale, index, totalCaps, position, transformValues.rotation])
+  }, [index, totalCaps])
 
-  const scaleFactor = 0.45
+  if (!nodes || !materials) return
 
   return (
     <group
       ref={meshRef}
-      scale={[
-        finalScale[0] * scaleFactor,
-        finalScale[1] * scaleFactor,
-        finalScale[2] * scaleFactor
-      ]}
-      position={[position[0], position[1], 0]}
-      rotation={[0.2, transformValues.rotation, 0]}
+      // scale={[
+      //   finalScale[0] * scaleFactor,
+      //   finalScale[1] * scaleFactor,
+      //   finalScale[2] * scaleFactor
+      // ]}
+      // // position={[position[0], position[1], 0]}
+      // rotation={[0.2, transformValues.rotation, 0]}
     >
       <Float speed={1.2} floatIntensity={1}>
         <mesh
